@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN"
+                            "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="MyTestModelToolTopComponent.settings">
+                <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent"/>
+</settings>
+]]></file>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="MyTestModelToolTopComponent.wstcref">
+                    <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="MyTestModelToolTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="fri-cbw-MyTestModelTool1-MyTestModelToolTopComponent.instance">
+                <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent"/>
+                <attr name="preferredID" stringvalue="MyTestModelToolTopComponent"/>
+                <attr
+                    bundlevalue="fri.cbw.MyTestModelTool1.Bundle#CTL_MyTestModelToolAction" name="displayName"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="fri-cbw-MyTestModelTool1-MyTestModelToolTopComponent.shadow">
+                <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent-->
+                <attr name="originalFile" stringvalue="Actions/Window/fri-cbw-MyTestModelTool1-MyTestModelToolTopComponent.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="xml">
+        <folder name="entities">
+            <folder name="fri_cbw_MyTestModelTool1">
+                <file name="MyTestModelTool" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//fri.cbw.MyTestModelTool1//MyTestModelTool//EN"/>
+                </file>
+            </folder>
+        </folder>
+        <folder name="memory">
+            <folder name="fri">
+                <folder name="cbw">
+                    <folder name="MyTestModelTool1">
+                        <file name="MyTestModelToolTopComponent">
+                            <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent-->
+                            <attr name="settings.providerPath" stringvalue="xml/lookups//fri_cbw_MyTestModelTool1/MyTestModelTool.instance"/>
+                        </file>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+        <folder name="lookups">
+            <folder name="fri_cbw_MyTestModelTool1">
+                <file name="MyTestModelTool.instance">
+                    <!--fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>
