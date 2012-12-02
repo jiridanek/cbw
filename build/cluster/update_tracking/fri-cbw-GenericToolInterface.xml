@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="fri.cbw.GenericToolInterface">
-    <module_version install_time="1354127520905" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1354480797682" last="true" origin="installer" specification_version="1.0">
         <file crc="3693773223" name="config/Modules/fri-cbw-GenericToolInterface.xml"/>
-        <file crc="3931168228" name="modules/fri-cbw-GenericToolInterface.jar"/>
+        <file crc="2242097452" name="modules/fri-cbw-GenericToolInterface.jar"/>
     </module_version>
 </module>

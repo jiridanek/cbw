@@ -31,6 +31,11 @@ public class MyTestModelTool1 extends ModelToolInterface {
         return "MyTestModelToolTopComponent";
     }
 
+    @Override
+    public String[] getSpecies() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
   
     
 }
