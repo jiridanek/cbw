@@ -4,15 +4,13 @@
  */
 package fri.cbw.MyTestModelTool1;
 
-import fri.cbw.GenericToolInterface.ModelToolInterface;
-import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
+import fri.cbw.GenericTools.AbstractModelTool;
 
 /**
  *
  * @author Sašo
  */
-public class MyTestModelTool1 extends ModelToolInterface {
+public class MyTestModelTool1 extends AbstractModelTool {
     private String name = "MyTestModelTool1";
     private String author = "Sašo";
 
@@ -33,6 +31,11 @@ public class MyTestModelTool1 extends ModelToolInterface {
 
     @Override
     public String[] getSpecies() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String[] getReactions() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

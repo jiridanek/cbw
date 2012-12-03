@@ -4,13 +4,13 @@
  */
 package fri.cbw.MyTestParamEvalTool1;
 
-import fri.cbw.GenericToolInterface.ParamEvalToolInterface;
+import fri.cbw.GenericTools.AbstractParamEvalTool;
 
 /**
  *
  * @author Sašo
  */
-public class MyTestParamEvalTool1 extends ParamEvalToolInterface{
+public class MyTestParamEvalTool1 extends AbstractParamEvalTool{
 
     @Override
     public String getName() {

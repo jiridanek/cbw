@@ -17,6 +17,7 @@
             </module-dependencies>
             <public-packages>
                 <package>fri.cbw.GenericToolInterface</package>
+                <package>fri.cbw.GenericTools</package>
             </public-packages>
         </data>
     </configuration>

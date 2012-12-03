@@ -10,6 +10,7 @@ package fri.cbw.core.palette;
  */
 
 import fri.cbw.GenericToolInterface.GenericToolInterface;
+import fri.cbw.GenericTools.AbstractGenericTool;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -25,9 +26,9 @@ public class Tool extends Object implements Transferable, Cloneable{
    
    private String title;
    private String author;
-   private GenericToolInterface gt;
+   private AbstractGenericTool gt;
    
-   public Tool(String title, String author, String icon16, String icon32, GenericToolInterface gt) {
+   public Tool(String title, String author, AbstractGenericTool gt) {
       this.title  = title;
       this.author = author;
       this.gt = gt;
@@ -70,14 +71,14 @@ public class Tool extends Object implements Transferable, Cloneable{
     /**
      * @return the gt
      */
-    public GenericToolInterface getGt() {
+    public AbstractGenericTool getGt() {
         return gt;
     }
 
     /**
      * @param gt the gt to set
      */
-    public void setGt(GenericToolInterface gt) {
+    public void setGt(AbstractGenericTool gt) {
         this.gt = gt;
     }
 

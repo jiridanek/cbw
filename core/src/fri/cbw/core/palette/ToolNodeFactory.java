@@ -4,10 +4,10 @@
  */
 package fri.cbw.core.palette;
 
-import fri.cbw.GenericToolInterface.ModelToolInterface;
-import fri.cbw.GenericToolInterface.ParamEvalToolInterface;
+import fri.cbw.GenericTools.AbstractModelTool;
+import fri.cbw.GenericTools.AbstractParamEvalTool;
+import fri.cbw.GenericTools.AbstractPlotTool;
 import java.util.List;
-import java.util.Locale;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
@@ -28,37 +28,24 @@ class ToolNodeFactory extends ChildFactory<Tool> {
     protected boolean createKeys(List<Tool> list) {
         
         if("ModelTool".equals(type)){
-            for(ModelToolInterface mti : Lookup.getDefault().lookupAll(ModelToolInterface.class) ){
-                Tool tool = new Tool(mti.getName(), mti.getAuthor(),
-                        "com/galileo/netbeans/module/cover_small.jpg",
-                        "com/galileo/netbeans/module/cover_big.jpg",
-                        mti
-                        );
+            for(AbstractModelTool mti : Lookup.getDefault().lookupAll(AbstractModelTool.class) ){
+                Tool tool = new Tool(mti.getName(), mti.getAuthor(), mti);
                 list.add(tool);
             }
         }
         else if("ParamEvalTool".equals(type)){
-            for(ParamEvalToolInterface peti : Lookup.getDefault().lookupAll(ParamEvalToolInterface.class) ){
-                Tool tool = new Tool(peti.getName(), peti.getAuthor(),
-                        "com/galileo/netbeans/module/cover_small.jpg",
-                        "com/galileo/netbeans/module/cover_big.jpg",
-                        peti);
+            for(AbstractParamEvalTool peti : Lookup.getDefault().lookupAll(AbstractParamEvalTool.class) ){
+                Tool tool = new Tool(peti.getName(), peti.getAuthor(), peti);
+                list.add(tool);
+            }
+        }
+        else if("PlotTool".equals(type)){
+            for(AbstractPlotTool peti : Lookup.getDefault().lookupAll(AbstractPlotTool.class) ){
+                Tool tool = new Tool(peti.getName(), peti.getAuthor(), peti);
                 list.add(tool);
             }
         }
         
-        
-        /*
-        Locale[] locales = Locale.getAvailableLocales();
-        for(Locale locale : locales){
-            if(locale.getDisplayCountry().startsWith(type)){
-                Tool tool = new Tool(locale.getDisplayCountry(), "Janez",
-                    "com/galileo/netbeans/module/cover_small.jpg",
-                    "com/galileo/netbeans/module/cover_big.jpg");
-                list.add(tool);
-            }
-        }
-        */
         return true;
     }
     
