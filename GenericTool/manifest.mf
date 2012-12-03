@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: fri.cbw.GenericTool
+OpenIDE-Module-Localizing-Bundle: fri/cbw/GenericTool/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
