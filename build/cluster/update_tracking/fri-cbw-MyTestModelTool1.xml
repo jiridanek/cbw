@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="fri.cbw.MyTestModelTool1">
-    <module_version install_time="1354485727094" last="true" origin="installer" specification_version="1.0">
-        <file crc="2783763565" name="config/Modules/fri-cbw-MyTestModelTool1.xml"/>
-        <file crc="2144386824" name="modules/fri-cbw-MyTestModelTool1.jar"/>
-    </module_version>
-</module>

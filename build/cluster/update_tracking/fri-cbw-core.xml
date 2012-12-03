@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="fri.cbw.core">
-    <module_version install_time="1354485728219" last="true" origin="installer" specification_version="1.0">
-        <file crc="290424468" name="config/Modules/fri-cbw-core.xml"/>
-        <file crc="1072905244" name="modules/fri-cbw-core.jar"/>
-    </module_version>
-</module>

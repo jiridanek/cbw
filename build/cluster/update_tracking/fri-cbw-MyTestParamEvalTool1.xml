@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module codename="fri.cbw.MyTestParamEvalTool1">
-    <module_version install_time="1354485727550" last="true" origin="installer" specification_version="1.0">
-        <file crc="607977977" name="config/Modules/fri-cbw-MyTestParamEvalTool1.xml"/>
-        <file crc="847833082" name="modules/fri-cbw-MyTestParamEvalTool1.jar"/>
-    </module_version>
-</module>
