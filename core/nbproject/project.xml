@@ -7,7 +7,7 @@
             <suite-component/>
             <module-dependencies>
                 <dependency>
-                    <code-name-base>fri.cbw.GenericToolInterface</code-name-base>
+                    <code-name-base>fri.cbw.GenericTool</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

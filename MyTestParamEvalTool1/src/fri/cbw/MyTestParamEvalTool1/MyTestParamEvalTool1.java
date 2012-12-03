@@ -4,7 +4,7 @@
  */
 package fri.cbw.MyTestParamEvalTool1;
 
-import fri.cbw.GenericTools.AbstractParamEvalTool;
+import fri.cbw.GenericTool.AbstractParamEvalTool;
 
 /**
  *

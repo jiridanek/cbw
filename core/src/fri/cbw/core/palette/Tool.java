@@ -9,16 +9,11 @@ package fri.cbw.core.palette;
  * @author Sašo
  */
 
-import fri.cbw.GenericToolInterface.GenericToolInterface;
-import fri.cbw.GenericTools.AbstractGenericTool;
-import java.awt.Image;
+import fri.cbw.GenericTool.AbstractGenericTool;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.beans.BeanInfo;
 import java.io.IOException;
-import org.netbeans.api.visual.action.WidgetAction;
-import org.openide.util.ImageUtilities;
 
 public class Tool extends Object implements Transferable, Cloneable{
    

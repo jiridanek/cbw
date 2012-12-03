@@ -4,9 +4,9 @@
  */
 package fri.cbw.core.palette;
 
-import fri.cbw.GenericTools.AbstractModelTool;
-import fri.cbw.GenericTools.AbstractParamEvalTool;
-import fri.cbw.GenericTools.AbstractPlotTool;
+import fri.cbw.GenericTool.AbstractModelTool;
+import fri.cbw.GenericTool.AbstractParamEvalTool;
+import fri.cbw.GenericTool.AbstractPlotTool;
 import java.util.List;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;

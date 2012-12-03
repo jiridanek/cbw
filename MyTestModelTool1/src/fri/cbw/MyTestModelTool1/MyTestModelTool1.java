@@ -4,7 +4,7 @@
  */
 package fri.cbw.MyTestModelTool1;
 
-import fri.cbw.GenericTools.AbstractModelTool;
+import fri.cbw.GenericTool.AbstractModelTool;
 
 /**
  *
