@@ -16,9 +16,8 @@
  * Software is Sun Microsystems, Inc. Portions Copyright 1997-2007 Sun
  * Microsystems, Inc. All Rights Reserved.
  */
-package fri.cbw.core.graph;
+package fri.cbw.ToolGraph;
 
-import fri.cbw.core.palette.Tool;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.graph.GraphScene;
@@ -35,12 +34,12 @@ import java.awt.*;
 public class SceneReconnectProvider implements ReconnectProvider {
     
     private String edge;
-    private Tool originalNode;
-    private Tool replacementNode;
+    private ToolWrapper originalNode;
+    private ToolWrapper replacementNode;
     
-    private GraphSceneImpl scene;
+    private ToolGraphSceneImpl scene;
     
-    public SceneReconnectProvider(GraphSceneImpl scene){
+    public SceneReconnectProvider(ToolGraphSceneImpl scene){
         this.scene=scene;
     }
     
@@ -67,7 +66,7 @@ public class SceneReconnectProvider implements ReconnectProvider {
     
     public ConnectorState isReplacementWidget(ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource) {
         Object object = scene.findObject(replacementWidget);
-        replacementNode = scene.isNode(object) ? (Tool) object : null;
+        replacementNode = scene.isNode(object) ? (ToolWrapper) object : null;
         if (replacementNode != null)
             return ConnectorState.ACCEPT;
         return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;

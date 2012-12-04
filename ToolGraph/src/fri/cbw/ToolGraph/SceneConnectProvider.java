@@ -16,9 +16,8 @@
  * Software is Sun Microsystems, Inc. Portions Copyright 1997-2007 Sun
  * Microsystems, Inc. All Rights Reserved.
  */
-package fri.cbw.core.graph;
+package fri.cbw.ToolGraph;
 
-import fri.cbw.core.palette.Tool;
 import org.netbeans.api.visual.action.ConnectProvider;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.graph.GraphScene;
@@ -33,25 +32,25 @@ import java.awt.*;
  */
 public class SceneConnectProvider implements ConnectProvider {
     
-    private Tool source = null;
-    private Tool target = null;
+    private ToolWrapper source = null;
+    private ToolWrapper target = null;
     
-    private GraphSceneImpl scene;
+    private ToolGraphSceneImpl scene;
     
-    public SceneConnectProvider(GraphSceneImpl scene){
+    public SceneConnectProvider(ToolGraphSceneImpl scene){
         this.scene=scene;
     }
 
     
     public boolean isSourceWidget(Widget sourceWidget) {
         Object object = scene.findObject(sourceWidget);
-        source = scene.isNode(object) ? (Tool) object : null;
+        source = scene.isNode(object) ? (ToolWrapper) object : null;
         return source != null;
     }
     
     public ConnectorState isTargetWidget(Widget sourceWidget, Widget targetWidget) {
         Object object = scene.findObject(targetWidget);
-        target = scene.isNode(object) ? (Tool) object : null;
+        target = scene.isNode(object) ? (ToolWrapper) object : null;
         if (target != null)
             return ! source.equals(target) ? ConnectorState.ACCEPT : ConnectorState.REJECT_AND_STOP;
         return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;

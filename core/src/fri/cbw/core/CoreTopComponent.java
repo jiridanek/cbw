@@ -4,8 +4,8 @@
  */
 package fri.cbw.core;
 
-import fri.cbw.core.graph.GraphSceneImpl;
-import fri.cbw.core.palette.ToolTypeNodeFactory;
+import fri.cbw.ToolGraph.ToolGraphSceneImpl;
+import fri.cbw.ToolPalette.ToolTypeNodeFactory;
 import java.awt.BorderLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -67,7 +67,7 @@ public final class CoreTopComponent extends TopComponent {
         associateLookup(Lookups.fixed(p));
         
         
-        GraphSceneImpl scene = new GraphSceneImpl();
+        ToolGraphSceneImpl scene = new ToolGraphSceneImpl();
         JComponent view = scene.createView();
         scenePanel.setViewportView(view);
         add(scene.createSatelliteView(), BorderLayout.EAST);

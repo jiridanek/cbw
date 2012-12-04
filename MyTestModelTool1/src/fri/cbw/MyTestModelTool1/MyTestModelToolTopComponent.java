@@ -367,11 +367,12 @@ public final class MyTestModelToolTopComponent extends TopComponent {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAddSpecies)
-                    .addComponent(jButtonDeleteSpecies)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4)
-                    .addComponent(jButtonDeleteReaction))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonAddSpecies)
+                        .addComponent(jButtonDeleteSpecies)
+                        .addComponent(jButtonDeleteReaction)))
                 .addGap(178, 178, 178))
         );
     }// </editor-fold>//GEN-END:initComponents

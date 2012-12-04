@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fri.cbw.core.palette;
+package fri.cbw.ToolPalette;
 
 import java.util.List;
 import org.openide.nodes.AbstractNode;

@@ -11,11 +11,14 @@ import java.awt.Dimension;
 import java.text.DecimalFormat;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.Pane;
@@ -29,8 +32,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import fri.cbw.GenericTool.ToolTopComponent;
+import fri.cbw.ToolGraph.ToolWrapper;
+import java.util.logging.Logger;
+import org.netbeans.api.visual.graph.GraphScene;
+import org.netbeans.api.visual.widget.general.IconNodeWidget;
 
 /**
  * Top component which displays something.
@@ -53,7 +62,7 @@ preferredID = "MyTestPlotToolTopComponent")
     "CTL_MyTestPlotToolTopComponent=MyTestPlotTool Window",
     "HINT_MyTestPlotToolTopComponent=This is a MyTestPlotTool window"
 })
-public final class MyTestPlotToolTopComponent extends TopComponent {
+public final class MyTestPlotToolTopComponent extends ToolTopComponent {
     
     private static final int PANEL_WIDTH_INT = 675;
     private static final int PANEL_HEIGHT_INT = 400;
@@ -70,7 +79,8 @@ public final class MyTestPlotToolTopComponent extends TopComponent {
         setName(Bundle.CTL_MyTestPlotToolTopComponent());
         setToolTipText(Bundle.HINT_MyTestPlotToolTopComponent());
         setLayout(new BorderLayout());
-        init();
+        initLineChart();
+        //init();
     }
 
     /**
@@ -80,19 +90,66 @@ public final class MyTestPlotToolTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(MyTestPlotToolTopComponent.class, "MyTestPlotToolTopComponent.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jButton1)
+                .addContainerGap(58, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(246, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(104, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try{
+            ToolWrapper tool = (ToolWrapper)getScene().findObject (getToolNode());
+            ToolWrapper prevTool = tool.getPrevNode(getScene());
+            
+        }catch(ClassCastException e){
+            Logger.getAnonymousLogger().severe(e.getMessage());
+            e.printStackTrace();
+        }
+         
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
@@ -117,7 +174,7 @@ public final class MyTestPlotToolTopComponent extends TopComponent {
     }
     
     private void createScene() {
-        chart = createBarChart();
+        chart = createLineChart();//createBarChart();
         chartFxPanel.setScene(new Scene(chart));
     }
     
@@ -203,4 +260,54 @@ public final class MyTestPlotToolTopComponent extends TopComponent {
             }
         });
     }
+    
+    public void initLineChart() {
+        tableModel = new SampleTableModel();
+        // create javafx panel for charts
+        chartFxPanel = new JFXPanel();
+        chartFxPanel.setPreferredSize(new Dimension(PANEL_WIDTH_INT, PANEL_HEIGHT_INT));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        JPanel chartTablePanel = new JPanel();
+        chartTablePanel.setLayout(new BorderLayout());
+        chartTablePanel.add(chartFxPanel, BorderLayout.CENTER);
+
+        panel.add(chartTablePanel, BorderLayout.CENTER);
+        panel.add(jPanel1, BorderLayout.EAST);
+
+        add(panel, BorderLayout.CENTER);
+
+        // create JavaFX scene
+        Platform.runLater(new Runnable() {
+            public void run() {
+                createScene();
+            }
+        });
+    }
+    
+    public LineChart createLineChart(){
+        NumberAxis xAxis = new NumberAxis("Values for X-Axis", 0, 3, 1);
+        NumberAxis yAxis = new NumberAxis("Values for Y-Axis", 0, 3, 1);
+        ObservableList<XYChart.Series<Double,Double>> lineChartData = FXCollections.observableArrayList(
+            new LineChart.Series<Double,Double>("Series 1", FXCollections.observableArrayList(
+                new XYChart.Data<Double,Double>(0.0, 1.0),
+                new XYChart.Data<Double,Double>(1.2, 1.4),
+                new XYChart.Data<Double,Double>(2.2, 1.9),
+                new XYChart.Data<Double,Double>(2.7, 2.3),
+                new XYChart.Data<Double,Double>(2.9, 0.5)
+            )),
+            new LineChart.Series<Double,Double>("Series 2", FXCollections.observableArrayList(
+                new XYChart.Data<Double,Double>(0.0, 1.6),
+                new XYChart.Data<Double,Double>(0.8, 0.4),
+                new XYChart.Data<Double,Double>(1.4, 2.9),
+                new XYChart.Data<Double,Double>(2.1, 1.3),
+                new XYChart.Data<Double,Double>(2.6, 0.9)
+            ))
+        );
+        
+        return new LineChart(xAxis, yAxis, lineChartData);
+    }
+    
 }

@@ -16,7 +16,7 @@
  * Software is Sun Microsystems, Inc. Portions Copyright 1997-2007 Sun
  * Microsystems, Inc. All Rights Reserved.
  */
-package fri.cbw.core.graph;
+package fri.cbw.ToolGraph;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -40,13 +40,13 @@ public class EdgeMenu implements PopupMenuProvider, ActionListener {
 //    private static final String DELETE_ALL_CP_ACTION = "deleteAllCPAction"; // NOI18N
     private static final String DELETE_TRANSITION = "deleteTransition"; // NOI18N
 
-    private GraphSceneImpl scene;
+    private ToolGraphSceneImpl scene;
 
     private JPopupMenu menu;
     private ConnectionWidget edge;
     private Point point;
 
-    public EdgeMenu(GraphSceneImpl scene) {
+    public EdgeMenu(ToolGraphSceneImpl scene) {
         this.scene = scene;
         menu = new JPopupMenu("Transition Menu");
         JMenuItem item;

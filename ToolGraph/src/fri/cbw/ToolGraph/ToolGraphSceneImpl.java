@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fri.cbw.core.graph;
+package fri.cbw.ToolGraph;
 
-import fri.cbw.core.palette.Tool;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.datatransfer.Transferable;
@@ -35,7 +34,8 @@ import org.openide.windows.WindowManager;
  *
  * @author Sašo
  */
-public class GraphSceneImpl extends GraphScene<Tool, String> {
+public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String> {
+    private static ToolGraphSceneImpl istance;
     
     private LayerWidget mainLayer;
     private LayerWidget connectionLayer;
@@ -51,7 +51,15 @@ public class GraphSceneImpl extends GraphScene<Tool, String> {
     
     private EdgeMenu edgeMenu=new EdgeMenu(this);
     
-    public GraphSceneImpl() {
+    
+    public static ToolGraphSceneImpl getnIstance(){
+    if (istance == null)
+        istance = new ToolGraphSceneImpl();		
+    return istance;
+  }
+
+    
+    public ToolGraphSceneImpl() {
         mainLayer = new LayerWidget(this);
         addChild(mainLayer);
         
@@ -69,20 +77,20 @@ public class GraphSceneImpl extends GraphScene<Tool, String> {
 
             @Override
             public void accept(Widget widget, Point point, Transferable transferable) {
-                Tool t;
+                ToolWrapper t;
                 try {
-                    t = (Tool) getToolFromTranferable(transferable).clone();
-                    Widget w = GraphSceneImpl.this.addNode(t);
+                    t = (ToolWrapper) getToolFromTranferable(transferable).clone();
+                    Widget w = ToolGraphSceneImpl.this.addNode(t);
                     w.setPreferredLocation(widget.convertLocalToScene(point));
                 } catch (CloneNotSupportedException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }
 
-            private Tool getToolFromTranferable(Transferable transferable) {
-                Tool t = null;
+            private ToolWrapper getToolFromTranferable(Transferable transferable) {
+                ToolWrapper t = null;
                 try {
-                    t = (Tool) transferable.getTransferData(Tool.DATA_FLAVOR);
+                    t = (ToolWrapper) transferable.getTransferData(ToolWrapper.DATA_FLAVOR);
                 } catch (UnsupportedFlavorException ex) {
                     Exceptions.printStackTrace(ex);
                 } catch (IOException ex) {
@@ -93,10 +101,8 @@ public class GraphSceneImpl extends GraphScene<Tool, String> {
         }));
     }
     
-    
-    
     @Override
-    protected Widget attachNodeWidget(Tool tool) {
+    protected Widget attachNodeWidget(ToolWrapper tool) {
         IconNodeWidget widget = new IconNodeWidget(this);
         widget.setLabel(tool.getTitle());
         widget.setBorder(BorderFactory.createLineBorder(3));
@@ -107,7 +113,7 @@ public class GraphSceneImpl extends GraphScene<Tool, String> {
         
         mainLayer.addChild(widget);
         
-        widget.getActions().addAction(ActionFactory.createPopupMenuAction(new NodeMenu(this, tool)));
+        widget.getActions().addAction(ActionFactory.createPopupMenuAction(new NodeMenu(this)));
         
         return widget;
         
@@ -131,14 +137,14 @@ public class GraphSceneImpl extends GraphScene<Tool, String> {
     }
 
     @Override
-    protected void attachEdgeSourceAnchor(String edge, Tool oldSourceNode, Tool sourceNode) {
+    protected void attachEdgeSourceAnchor(String edge, ToolWrapper oldSourceNode, ToolWrapper sourceNode) {
         ConnectionWidget widget = (ConnectionWidget) findWidget(edge);
         Widget sourceNodeWidget = findWidget (sourceNode);
         widget.setSourceAnchor(sourceNodeWidget != null ? AnchorFactory.createFreeRectangularAnchor(sourceNodeWidget, true) : null);
     }
 
     @Override
-    protected void attachEdgeTargetAnchor(String edge, Tool oldTargetNode, Tool targetNode) {
+    protected void attachEdgeTargetAnchor(String edge, ToolWrapper oldTargetNode, ToolWrapper targetNode) {
         ConnectionWidget widget = (ConnectionWidget) findWidget(edge);
         Widget targetNodeWidget = findWidget (targetNode);
         widget.setTargetAnchor(targetNodeWidget != null ? AnchorFactory.createFreeRectangularAnchor(targetNodeWidget, true) : null);

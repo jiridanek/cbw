@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fri.cbw.core.palette;
+package fri.cbw.ToolPalette;
 
 /**
  *
  * @author Sašo
  */
+import fri.cbw.ToolGraph.ToolWrapper;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import java.awt.Image;
@@ -16,9 +17,9 @@ import java.io.IOException;
 
 public class ToolNode extends AbstractNode {
 
-    private Tool tool = null;
+    private ToolWrapper tool = null;
 
-    public ToolNode(Tool tool) {
+    public ToolNode(ToolWrapper tool) {
         super(Children.LEAF);
         this.tool = tool;
         this.setDisplayName(getLabel());

@@ -16,9 +16,8 @@
  * Software is Sun Microsystems, Inc. Portions Copyright 1997-2007 Sun
  * Microsystems, Inc. All Rights Reserved.
  */
-package fri.cbw.core.graph;
+package fri.cbw.ToolGraph;
 
-import fri.cbw.core.palette.Tool;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +26,7 @@ import javax.swing.JPopupMenu;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -41,12 +41,10 @@ public class NodeMenu implements PopupMenuProvider, ActionListener {
     private IconNodeWidget node;
 
     private Point point;
-    private GraphSceneImpl scene;
-    private Tool tool;
+    private ToolGraphSceneImpl scene;
     
-    public NodeMenu(GraphSceneImpl scene, Tool t) {
+    public NodeMenu(ToolGraphSceneImpl scene) {
         this.scene=scene;
-        this.tool=t;
         menu = new JPopupMenu("Node Menu");
         JMenuItem item;
         
@@ -72,10 +70,11 @@ public class NodeMenu implements PopupMenuProvider, ActionListener {
     
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals(DELETE_NODE_ACTION)){
-            scene.removeNodeWithEdges((Tool)scene.findObject (node));
+            scene.removeNodeWithEdges((ToolWrapper)scene.findObject (node));
             scene.validate();
         }else if(e.getActionCommand().equals(EDIT_NODE_ACTION)){
-            tool.getGt().openEditor();
+            ToolWrapper tool = (ToolWrapper)scene.findObject (node);
+            tool.getGt().openEditor(scene, node);
         }
     }
 
