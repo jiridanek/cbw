@@ -29,7 +29,7 @@ autostore = false)
 @TopComponent.Description(
     preferredID = "MyTestModelToolTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
-persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
@@ -350,6 +350,11 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         });
 
         jTableSpecies.setModel(speciesTableModel);
+        jTableSpecies.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTableSpeciesPropertyChange(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTableSpecies);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -416,8 +421,6 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     
     private void jButtonAddSpeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddSpeciesActionPerformed
         speciesTableModel.insertRow(0, new Object[] {""});
-        System.out.println(getMyTestModelTool().getSpecies());
-        System.out.println(getMyTestModelTool().getSpecies().length);
     }//GEN-LAST:event_jButtonAddSpeciesActionPerformed
 
     private void jComboBoxSpecies1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSpecies1ActionPerformed
@@ -469,6 +472,12 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
             reactionsTableModel.removeRow(row);
         }
     }//GEN-LAST:event_jButtonDeleteReactionActionPerformed
+
+    private void jTableSpeciesPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableSpeciesPropertyChange
+        if("tableCellEditor".equals(evt.getPropertyName())){
+            getMyTestModelTool().setSpecies(getSpeciesList());
+        }
+    }//GEN-LAST:event_jTableSpeciesPropertyChange
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton5;

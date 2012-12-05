@@ -32,15 +32,4 @@ public class MyTestModelTool1 extends AbstractModelTool {
         return "MyTestModelToolTopComponent";
     }
 
-    @Override
-    public String[] getSpecies() {
-        MyTestModelToolTopComponent tc = (MyTestModelToolTopComponent) WindowManager.getDefault().findTopComponent(getTopComponentName());
-
-        return tc.getSpeciesList();
-    }
-    
-    @Override
-    public String[][] getReactions() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }
