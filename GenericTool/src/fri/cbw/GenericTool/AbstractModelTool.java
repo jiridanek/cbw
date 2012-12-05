@@ -12,5 +12,5 @@ public abstract class AbstractModelTool extends AbstractGenericTool {
     
     abstract public String[] getSpecies();
     
-    abstract public String[] getReactions();
+    abstract public String[][] getReactions();
 }

@@ -4,11 +4,17 @@
  */
 package fri.cbw.MyTestModelTool1;
 
+import fri.cbw.GenericTool.ToolTopComponent;
+import fri.cbw.ToolGraph.ToolGraphSceneImpl;
+import fri.cbw.ToolGraph.ToolWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.netbeans.api.visual.graph.GraphScene;
+import org.netbeans.api.visual.widget.general.IconNodeWidget;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
@@ -35,11 +41,10 @@ preferredID = "MyTestModelToolTopComponent")
     "CTL_MyTestModelToolTopComponent=MyTestModelTool Window",
     "HINT_MyTestModelToolTopComponent=This is a MyTestModelTool window"
 })
-public final class MyTestModelToolTopComponent extends TopComponent {
+public final class MyTestModelToolTopComponent extends ToolTopComponent {
     
-    
-    private DefaultTableModel speciesTableModel = new javax.swing.table.DefaultTableModel(new Object [][] { {"Test"}, {"Test2"}}, new String [] { "Species" });
-    private DefaultTableModel reactionsTableModel = new javax.swing.table.DefaultTableModel(new String [] { "Reactants", "K", "Products" }, 0);
+    private DefaultTableModel speciesTableModel = new javax.swing.table.DefaultTableModel( new String [] { "Species" }, 0 );
+    private DefaultTableModel reactionsTableModel = new javax.swing.table.DefaultTableModel(new String [] { "Reactants", "K", "Products" }, 0);;
     
     
     public MyTestModelToolTopComponent() {
@@ -48,8 +53,7 @@ public final class MyTestModelToolTopComponent extends TopComponent {
         setToolTipText(Bundle.HINT_MyTestModelToolTopComponent());
     }
     
-    
-    private String[] getSpeciesList(){
+    public String[] getSpeciesList(){
         Vector data = speciesTableModel.getDataVector();
         String[] list = new String[data.size()];
         
@@ -58,6 +62,17 @@ public final class MyTestModelToolTopComponent extends TopComponent {
         }
         
         return list;
+    }
+    
+    private MyTestModelTool1 getMyTestModelTool(){
+        try{
+            ToolWrapper tw = (ToolWrapper)getScene().findObject (getToolNode());
+            return (MyTestModelTool1) tw.getNodeGenericTool();
+        }catch(ClassCastException e){
+            Logger.getAnonymousLogger().severe(e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
     
     
@@ -96,7 +111,7 @@ public final class MyTestModelToolTopComponent extends TopComponent {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableReactions = new javax.swing.JTable();
         jButtonDeleteReaction = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButtonAddReaction = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableSpecies = new javax.swing.JTable();
 
@@ -327,10 +342,10 @@ public final class MyTestModelToolTopComponent extends TopComponent {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton4, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButton4.text")); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddReaction, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButtonAddReaction.text")); // NOI18N
+        jButtonAddReaction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonAddReactionActionPerformed(evt);
             }
         });
 
@@ -354,7 +369,7 @@ public final class MyTestModelToolTopComponent extends TopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDeleteSpecies)
                         .addGap(329, 329, 329)
-                        .addComponent(jButton4)
+                        .addComponent(jButtonAddReaction)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDeleteReaction)))
                 .addContainerGap(173, Short.MAX_VALUE))
@@ -368,7 +383,7 @@ public final class MyTestModelToolTopComponent extends TopComponent {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
+                    .addComponent(jButtonAddReaction)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonAddSpecies)
                         .addComponent(jButtonDeleteSpecies)
@@ -376,7 +391,14 @@ public final class MyTestModelToolTopComponent extends TopComponent {
                 .addGap(178, 178, 178))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
+    
+     
+    /**
+     * This method deletes a specie from the table
+     * @param evt 
+     */
     private void jButtonDeleteSpeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteSpeciesActionPerformed
         int row = jTableSpecies.getSelectedRow();
         
@@ -384,16 +406,18 @@ public final class MyTestModelToolTopComponent extends TopComponent {
             speciesTableModel.removeRow(row);
         }
     }//GEN-LAST:event_jButtonDeleteSpeciesActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    
+    private void jButtonAddReactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddReactionActionPerformed
         jComboBoxSpecies1.setModel(new javax.swing.DefaultComboBoxModel(getSpeciesList()));
         jComboBoxSpecies2.setModel(new javax.swing.DefaultComboBoxModel(getSpeciesList()));
         jDialog1.setVisible(true);
         
-    }//GEN-LAST:event_jButton4ActionPerformed
-
+    }//GEN-LAST:event_jButtonAddReactionActionPerformed
+    
     private void jButtonAddSpeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddSpeciesActionPerformed
         speciesTableModel.insertRow(0, new Object[] {""});
+        System.out.println(getMyTestModelTool().getSpecies());
+        System.out.println(getMyTestModelTool().getSpecies().length);
     }//GEN-LAST:event_jButtonAddSpeciesActionPerformed
 
     private void jComboBoxSpecies1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSpecies1ActionPerformed
@@ -447,9 +471,9 @@ public final class MyTestModelToolTopComponent extends TopComponent {
     }//GEN-LAST:event_jButtonDeleteReactionActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonAddReaction;
     private javax.swing.JButton jButtonAddSpecies;
     private javax.swing.JButton jButtonDeleteReaction;
     private javax.swing.JButton jButtonDeleteSpecies;

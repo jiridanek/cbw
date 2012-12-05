@@ -4,6 +4,7 @@
  */
 package fri.cbw.MyTestParamEvalTool1;
 
+import fri.cbw.GenericTool.ToolTopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -31,7 +32,7 @@ preferredID = "MyTestParamEvalToolTopComponent")
     "CTL_MyTestParamEvalToolTopComponent=MyTestParamEvalTool Window",
     "HINT_MyTestParamEvalToolTopComponent=This is a MyTestParamEvalTool window"
 })
-public final class MyTestParamEvalToolTopComponent extends TopComponent {
+public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
 
     public MyTestParamEvalToolTopComponent() {
         initComponents();
@@ -101,4 +102,5 @@ public final class MyTestParamEvalToolTopComponent extends TopComponent {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
     }
+
 }

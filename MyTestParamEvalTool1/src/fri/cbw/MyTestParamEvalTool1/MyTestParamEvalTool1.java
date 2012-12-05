@@ -26,5 +26,15 @@ public class MyTestParamEvalTool1 extends AbstractParamEvalTool{
     public String getTopComponentName() {
         return "MyTestParamEvalToolTopComponent";
     }
+
+    @Override
+    public String[] getSpecies() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String[][] getReactions() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

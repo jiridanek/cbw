@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: fri.cbw.MyTestEnginTool1
+OpenIDE-Module-Localizing-Bundle: fri/cbw/MyTestEnginTool1/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

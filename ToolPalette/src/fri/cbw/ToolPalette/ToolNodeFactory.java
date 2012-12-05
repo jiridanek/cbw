@@ -4,6 +4,7 @@
  */
 package fri.cbw.ToolPalette;
 
+import fri.cbw.GenericTool.AbstractEnginTool;
 import fri.cbw.ToolGraph.ToolWrapper;
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.GenericTool.AbstractParamEvalTool;
@@ -28,21 +29,27 @@ class ToolNodeFactory extends ChildFactory<ToolWrapper> {
     @Override
     protected boolean createKeys(List<ToolWrapper> list) {
         
-        if("ModelTool".equals(type)){
-            for(AbstractModelTool mti : Lookup.getDefault().lookupAll(AbstractModelTool.class) ){
-                ToolWrapper tool = new ToolWrapper(mti.getName(), mti.getAuthor(), mti);
+        if("Model Tools".equals(type)){
+            for(AbstractModelTool at : Lookup.getDefault().lookupAll(AbstractModelTool.class) ){
+                ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
                 list.add(tool);
             }
         }
-        else if("ParamEvalTool".equals(type)){
-            for(AbstractParamEvalTool peti : Lookup.getDefault().lookupAll(AbstractParamEvalTool.class) ){
-                ToolWrapper tool = new ToolWrapper(peti.getName(), peti.getAuthor(), peti);
+        else if("Param Eval Tools".equals(type)){
+            for(AbstractParamEvalTool at : Lookup.getDefault().lookupAll(AbstractParamEvalTool.class) ){
+                ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
                 list.add(tool);
             }
         }
-        else if("PlotTool".equals(type)){
-            for(AbstractPlotTool peti : Lookup.getDefault().lookupAll(AbstractPlotTool.class) ){
-                ToolWrapper tool = new ToolWrapper(peti.getName(), peti.getAuthor(), peti);
+        else if("Plot Tools".equals(type)){
+            for(AbstractPlotTool at : Lookup.getDefault().lookupAll(AbstractPlotTool.class) ){
+                ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
+                list.add(tool);
+            }
+        }
+        else if("Engin Tools".equals(type)){
+            for(AbstractEnginTool at : Lookup.getDefault().lookupAll(AbstractEnginTool.class) ){
+                ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
                 list.add(tool);
             }
         }

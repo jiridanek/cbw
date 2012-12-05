@@ -6,6 +6,7 @@ package fri.cbw.GenericTool;
 
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 /**
@@ -22,9 +23,9 @@ public abstract class AbstractGenericTool extends Object {
 
     public void openEditor(GraphScene scene, IconNodeWidget node) {
         ToolTopComponent tc = (ToolTopComponent) WindowManager.getDefault().findTopComponent(getTopComponentName());
-        tc.open();
         tc.setToolNode(node);
         tc.setScene(scene);
+        tc.open();
         tc.requestActive();
     }
 }

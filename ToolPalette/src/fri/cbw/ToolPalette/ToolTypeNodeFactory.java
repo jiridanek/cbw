@@ -19,9 +19,10 @@ public class ToolTypeNodeFactory extends ChildFactory<String> {
     @Override
     protected boolean createKeys(List<String> list) {
         
-        list.add("ModelTool");
-        list.add("ParamEvalTool");
-        list.add("PlotTool");
+        list.add("Model Tools");
+        list.add("Param Eval Tools");
+        list.add("Plot Tools");
+        list.add("Engin Tools");
         
         return true;
     }

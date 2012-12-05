@@ -8,6 +8,6 @@ package fri.cbw.GenericTool;
  *
  * @author Sašo
  */
-public abstract class AbstractParamEvalTool extends AbstractGenericTool  {
+public abstract class AbstractParamEvalTool extends AbstractModelTool  {
     
 }

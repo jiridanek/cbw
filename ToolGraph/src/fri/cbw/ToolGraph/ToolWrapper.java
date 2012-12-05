@@ -26,21 +26,16 @@ public class ToolWrapper extends Object implements Transferable, Cloneable{
    
    private String title;
    private String author;
-   private AbstractGenericTool gt;
+   private AbstractGenericTool nodeGenericTool;
    
-   public ToolWrapper(String title, String author, AbstractGenericTool gt) {
+   public ToolWrapper(String title, String author, AbstractGenericTool genericTool) {
       this.title  = title;
       this.author = author;
-      this.gt = gt;
+      this.nodeGenericTool = genericTool;
    }
    
    
    public ToolWrapper getPrevNode(GraphScene scene) throws ClassCastException{
-       ToolGraphSceneImpl tgScene = (ToolGraphSceneImpl)scene;
-       
-       System.out.println();
-       System.out.println(scene);
-       
        Collection<String> edges = scene.findNodeEdges(this, false, true);
        if(edges != null && !edges.isEmpty()){
            String firstEdge = edges.iterator().next();
@@ -86,17 +81,17 @@ public class ToolWrapper extends Object implements Transferable, Cloneable{
    }
 
     /**
-     * @return the gt
+     * @return the nodeGenericTool
      */
-    public AbstractGenericTool getGt() {
-        return gt;
+    public AbstractGenericTool getNodeGenericTool() {
+        return nodeGenericTool;
     }
 
     /**
-     * @param gt the gt to set
+     * @param nodeGenericTool the nodeGenericTool to set
      */
-    public void setGt(AbstractGenericTool gt) {
-        this.gt = gt;
+    public void setNodeGenericTool(AbstractGenericTool nodeGenericTool) {
+        this.nodeGenericTool = nodeGenericTool;
     }
 
 

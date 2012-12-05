@@ -74,7 +74,7 @@ public class NodeMenu implements PopupMenuProvider, ActionListener {
             scene.validate();
         }else if(e.getActionCommand().equals(EDIT_NODE_ACTION)){
             ToolWrapper tool = (ToolWrapper)scene.findObject (node);
-            tool.getGt().openEditor(scene, node);
+            tool.getNodeGenericTool().openEditor(scene, node);
         }
     }
 
