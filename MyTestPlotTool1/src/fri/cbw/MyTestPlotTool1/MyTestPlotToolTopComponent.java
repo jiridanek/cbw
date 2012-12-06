@@ -4,7 +4,7 @@
  */
 package fri.cbw.MyTestPlotTool1;
 
-import fri.cbw.GenericTool.AbstractEnginTool;
+import fri.cbw.GenericTool.AbstractEngineTool;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -210,7 +210,7 @@ public final class MyTestPlotToolTopComponent extends ToolTopComponent {
         try{
             ToolWrapper tool = (ToolWrapper)getScene().findObject (getToolNode());
             ToolWrapper prevTool = tool.getPrevNode(getScene());
-            AbstractEnginTool gt = (AbstractEnginTool) prevTool.getNodeGenericTool();
+            AbstractEngineTool gt = (AbstractEngineTool) prevTool.getNodeGenericTool();
             
             return gt.getLineChartData(prevTool, getScene());
             

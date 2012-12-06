@@ -4,7 +4,7 @@
  */
 package fri.cbw.ToolPalette;
 
-import fri.cbw.GenericTool.AbstractEnginTool;
+import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.ToolGraph.ToolWrapper;
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.GenericTool.AbstractParamEvalTool;
@@ -47,8 +47,8 @@ class ToolNodeFactory extends ChildFactory<ToolWrapper> {
                 list.add(tool);
             }
         }
-        else if("Engin Tools".equals(type)){
-            for(AbstractEnginTool at : Lookup.getDefault().lookupAll(AbstractEnginTool.class) ){
+        else if("Engine Tools".equals(type)){
+            for(AbstractEngineTool at : Lookup.getDefault().lookupAll(AbstractEngineTool.class) ){
                 ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
                 list.add(tool);
             }

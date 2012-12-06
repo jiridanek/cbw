@@ -4,7 +4,7 @@
  */
 package fri.cbw.MyTestEnginTool1;
 
-import fri.cbw.GenericTool.AbstractEnginTool;
+import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.ToolGraph.ToolWrapper;
 import javafx.collections.FXCollections;
@@ -20,8 +20,8 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Sašo
  */
 
-@ServiceProvider(service = AbstractEnginTool.class)
-public class MyTestEnginTool1 extends AbstractEnginTool{
+@ServiceProvider(service = AbstractEngineTool.class)
+public class MyTestEnginTool1 extends AbstractEngineTool{
     ObservableList<XYChart.Series<Double,Double>> lineChartData;
     
     @Override

@@ -12,7 +12,7 @@ import org.netbeans.api.visual.graph.GraphScene;
  *
  * @author Sašo
  */
-public abstract class AbstractEnginTool extends AbstractGenericTool{
+public abstract class AbstractEngineTool extends AbstractGenericTool{
     
     
     /**
