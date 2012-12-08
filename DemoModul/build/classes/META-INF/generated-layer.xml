@@ -2,14 +2,6 @@
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN"
                             "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
-    <folder name="Menu">
-        <folder name="Window">
-            <file name="fri-cbw-DemoModul-DemoModulTopComponent.shadow">
-                <!--fri.cbw.DemoModul.DemoModulTopComponent-->
-                <attr name="originalFile" stringvalue="Actions/Window/fri-cbw-DemoModul-DemoModulTopComponent.instance"/>
-            </file>
-        </folder>
-    </folder>
     <folder name="Windows2">
         <folder name="Components">
             <file name="DemoModulTopComponent.settings">
@@ -30,55 +22,6 @@
   <state opened="false"/>
 </tc-ref>
 ]]></file>
-            </folder>
-        </folder>
-    </folder>
-    <folder name="Actions">
-        <folder name="Window">
-            <file name="fri-cbw-DemoModul-DemoModulTopComponent.instance">
-                <!--fri.cbw.DemoModul.DemoModulTopComponent-->
-                <attr
-                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
-                <attr name="component" newvalue="fri.cbw.DemoModul.DemoModulTopComponent"/>
-                <attr name="preferredID" stringvalue="DemoModulTopComponent"/>
-                <attr
-                    bundlevalue="fri.cbw.DemoModul.Bundle#CTL_DemoModulAction" name="displayName"/>
-            </file>
-        </folder>
-    </folder>
-    <folder name="xml">
-        <folder name="entities">
-            <folder name="fri_cbw_DemoModul">
-                <file name="DemoModul" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
-                    <!--fri.cbw.DemoModul.DemoModulTopComponent-->
-                    <attr name="hint.originalPublicID" stringvalue="-//fri.cbw.DemoModul//DemoModul//EN"/>
-                </file>
-            </folder>
-        </folder>
-        <folder name="memory">
-            <folder name="fri">
-                <folder name="cbw">
-                    <folder name="DemoModul">
-                        <file name="DemoModulTopComponent">
-                            <!--fri.cbw.DemoModul.DemoModulTopComponent-->
-                            <attr name="settings.providerPath" stringvalue="xml/lookups//fri_cbw_DemoModul/DemoModul.instance"/>
-                        </file>
-                    </folder>
-                </folder>
-            </folder>
-        </folder>
-        <folder name="lookups">
-            <folder name="fri_cbw_DemoModul">
-                <file name="DemoModul.instance">
-                    <!--fri.cbw.DemoModul.DemoModulTopComponent-->
-                    <attr
-                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
-                    <attr
-                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
-                    <attr name="settings.instanceClass" stringvalue="fri.cbw.DemoModul.DemoModulTopComponent"/>
-                    <attr name="settings.instanceOf" stringvalue="fri.cbw.DemoModul.DemoModulTopComponent"/>
-                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
-                </file>
             </folder>
         </folder>
     </folder>

@@ -5,6 +5,7 @@
 package fri.cbw.MyTestPlotTool1;
 
 import fri.cbw.GenericTool.AbstractPlotTool;
+import fri.cbw.GenericTool.ToolTopComponent;
 
 /**
  *
@@ -23,8 +24,8 @@ public class MyTestPlotTool extends AbstractPlotTool{
     }
 
     @Override
-    public String getTopComponentName() {
-        return "MyTestPlotToolTopComponent";
+    public Class getTopComponentClass() {
+        return MyTestPlotToolTopComponent.class;
     }
     
 }

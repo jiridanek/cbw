@@ -1,3 +1,7 @@
+||:fri.cbw.DemoModul.DemoModulTopComponent$2
+fri.cbw.DemoModul.DemoModulTopComponent$2
+fri.cbw.DemoModul.DemoModulTopComponent
+java.awt.event.FocusAdapter
 ||:fri.cbw.DemoModul.Bundle
 java.lang.Object
 fri.cbw.DemoModul.Bundle
@@ -23,12 +27,17 @@ org.openide.util.NbBundle
 javax.swing.JButton
 javax.swing.JLabel
 java.awt.Font
+java.lang.Throwable
+org.openide.DialogDisplayer
 java.util.Properties
 javax.swing.GroupLayout$SequentialGroup
+fri.cbw.DemoModul.DemoModulTopComponent$2
 fri.cbw.DemoModul.DemoModulTopComponent$1
+fri.cbw.DemoModul.DemoModulTool
 javax.swing.GroupLayout$Alignment
 javax.swing.GroupLayout
 org.openide.windows.TopComponent$Description
+javax.swing.JTextField
 javax.swing.GroupLayout$Group
 org.openide.NotifyDescriptor$Message
 fri.cbw.DemoModul.Bundle
@@ -36,5 +45,6 @@ fri.cbw.GenericTool.AbstractModelTool
 fri.cbw.ToolGraph.ToolWrapper
 org.netbeans.api.visual.graph.GraphScene
 ||:fri.cbw.DemoModul.DemoModulTool
+fri.cbw.DemoModul.DemoModulTopComponent
 fri.cbw.GenericTool.AbstractModelTool
 fri.cbw.DemoModul.DemoModulTool

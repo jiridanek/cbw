@@ -46,19 +46,13 @@ import org.netbeans.api.visual.widget.general.IconNodeWidget;
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(
-    dtd = "-//fri.cbw.MyTestPlotTool1//MyTestPlotTool//EN",
-autostore = false)
 @TopComponent.Description(
     preferredID = "MyTestPlotToolTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
-persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "fri.cbw.MyTestPlotTool1.MyTestPlotToolTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-    displayName = "#CTL_MyTestPlotToolAction",
-preferredID = "MyTestPlotToolTopComponent")
 @Messages({
     "CTL_MyTestPlotToolAction=MyTestPlotTool",
     "CTL_MyTestPlotToolTopComponent=MyTestPlotTool Window",
@@ -76,7 +70,8 @@ public final class MyTestPlotToolTopComponent extends ToolTopComponent {
     private Pane browser;
     
     
-    public MyTestPlotToolTopComponent() {
+    public MyTestPlotToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
+        super(scene, toolNode);
         initComponents();
         setName(Bundle.CTL_MyTestPlotToolTopComponent());
         setToolTipText(Bundle.HINT_MyTestPlotToolTopComponent());
@@ -211,8 +206,9 @@ public final class MyTestPlotToolTopComponent extends ToolTopComponent {
             ToolWrapper tool = (ToolWrapper)getScene().findObject (getToolNode());
             ToolWrapper prevTool = tool.getPrevNode(getScene());
             AbstractEngineTool gt = (AbstractEngineTool) prevTool.getNodeGenericTool();
+            gt.calculate(prevTool, getScene());
             
-            return gt.getLineChartData(prevTool, getScene());
+            return gt.getLineChartData();
             
         }catch(ClassCastException e){
             Logger.getAnonymousLogger().severe(e.getMessage());

@@ -9,7 +9,10 @@ import java.awt.Point;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
+import javax.swing.JFileChooser;
 import org.netbeans.api.visual.action.AcceptProvider;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.ConnectorState;
@@ -26,15 +29,16 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 
 /**
  *
  * @author Sašo
  */
-public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String> {
+public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String>{
     private static ToolGraphSceneImpl istance;
     
     private LayerWidget mainLayer;
@@ -173,4 +177,58 @@ public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String> {
     }
     
     
+    public void load () {
+        JFileChooser chooser = new JFileChooser ();
+        chooser.setDialogTitle ("Load Scene ...");
+        chooser.setMultiSelectionEnabled (false);
+        chooser.setFileSelectionMode (JFileChooser.FILES_ONLY);
+        if (chooser.showOpenDialog(getView()) == JFileChooser.APPROVE_OPTION) {
+            clear();
+            SceneSerializer.deserialize (this, chooser.getSelectedFile ());
+            validate ();
+        }
+    }
+
+    public void save () {
+        
+        for (ToolWrapper node : new ArrayList<ToolWrapper>(getNodes())) {
+            try{
+                node.getNodeGenericTool().getTc().doSave();
+            }catch(Exception e){
+                e.printStackTrace();
+                DialogDisplayer.getDefault().notify(
+                        new NotifyDescriptor.Message("Prišlo je do napake pri shranjevanju orodja!"));
+                return;
+            }
+        }
+        
+        JFileChooser chooser = new JFileChooser ();
+        chooser.setDialogTitle ("Save Scene ...");
+        chooser.setMultiSelectionEnabled (false);
+        chooser.setFileSelectionMode (JFileChooser.FILES_ONLY);
+        if (chooser.showSaveDialog (getView ()) == JFileChooser.APPROVE_OPTION) {
+            SceneSerializer.serialize (this, chooser.getSelectedFile ());
+        }
+    }
+    
+    public void clear() {
+        
+        /* Deleting connections and nodes form scene */
+        for (String edge : new ArrayList<String>(getEdges())) {
+            removeEdge(edge);
+        }
+        for (ToolWrapper node : new ArrayList<ToolWrapper>(getNodes())) {
+            removeNode(node);
+        }
+        
+        /* Closing all opend windows except core and palette */
+        Set<TopComponent> odprti = TopComponent.getRegistry().getOpened();
+        for (TopComponent topComponent : odprti) {
+            if (!(topComponent.getClass().toString().contains("fri.cbw.core.CoreTopComponent") 
+                    || topComponent.getClass().toString().contains("PaletteTopComponent"))) {
+                System.out.println("Class: " + topComponent.getClass());
+                topComponent.close();
+            }
+        }
+    }
 }

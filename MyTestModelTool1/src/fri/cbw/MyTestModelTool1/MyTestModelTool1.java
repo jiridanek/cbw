@@ -6,6 +6,7 @@ package fri.cbw.MyTestModelTool1;
 
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.GenericTool.ToolTopComponent;
+import org.omg.CORBA.TCKind;
 import org.openide.windows.WindowManager;
 
 /**
@@ -16,7 +17,12 @@ public class MyTestModelTool1 extends AbstractModelTool {
 
     private String name = "MyTestModelTool1";
     private String author = "Sašo";
-
+    
+    public MyTestModelTool1(){
+        
+    }
+    
+    
     @Override
     public String getName() {
         return name;
@@ -28,8 +34,8 @@ public class MyTestModelTool1 extends AbstractModelTool {
     }
 
     @Override
-    public String getTopComponentName() {
-        return "MyTestModelToolTopComponent";
+    public Class getTopComponentClass(){
+        return MyTestModelToolTopComponent.class;
     }
-
+    
 }

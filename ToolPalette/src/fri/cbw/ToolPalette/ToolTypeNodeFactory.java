@@ -22,7 +22,7 @@ public class ToolTypeNodeFactory extends ChildFactory<String> {
         list.add("Model Tools");
         list.add("Param Eval Tools");
         list.add("Plot Tools");
-        list.add("Engin Tools");
+        list.add("Engine Tools");
         
         return true;
     }

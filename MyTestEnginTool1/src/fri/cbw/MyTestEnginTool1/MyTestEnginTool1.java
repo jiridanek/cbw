@@ -22,17 +22,17 @@ import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = AbstractEngineTool.class)
 public class MyTestEnginTool1 extends AbstractEngineTool{
-    ObservableList<XYChart.Series<Double,Double>> lineChartData;
     
     @Override
-    public ObservableList<Series<Double, Double>> getLineChartData(Object toolWrapper, GraphScene scene) {
-        if(lineChartData == null){
-            calculateData(toolWrapper, scene);
-        } 
-        
-        return lineChartData;
+    public void calculate(Object toolWrapper, GraphScene scene) {
+        calculateData(toolWrapper, scene);
     }
-
+    
+    @Override
+    public ObservableList<XYChart.Series<Double,Double>> getLineChartData() {
+        return getLineChartData();
+    }
+    
     @Override
     public String getName() {
         return "MyTestEnginTool1";
@@ -44,9 +44,10 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
     }
 
     @Override
-    public String getTopComponentName() {
+    public Class getTopComponentClass() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
 
     private void calculateData(Object tool, GraphScene scene) {
         ToolWrapper prev = ((ToolWrapper)tool).getPrevNode(scene);
@@ -66,8 +67,6 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
            ));
         }
         
-        
-        lineChartData = FXCollections.observableArrayList(es);
+        setLineChartData(FXCollections.observableArrayList(es));
     }
-    
 }

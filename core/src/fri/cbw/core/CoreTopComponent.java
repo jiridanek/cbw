@@ -11,9 +11,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.TransferHandler;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.spi.palette.PaletteActions;
@@ -40,7 +42,7 @@ autostore = false)
     preferredID = "CoreTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "editor", openAtStartup = true)
+@TopComponent.Registration(position=1, mode = "editor", openAtStartup = true)
 @ActionID(category = "Window", id = "fri.cbw.core.CoreTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -54,6 +56,7 @@ preferredID = "CoreTopComponent")
 public final class CoreTopComponent extends TopComponent {
     
     //private ToolTransferHandler th = new ToolTransferHandler();
+    ToolGraphSceneImpl scene;
     
     public CoreTopComponent() {
         initComponents();
@@ -67,7 +70,7 @@ public final class CoreTopComponent extends TopComponent {
         associateLookup(Lookups.fixed(p));
         
         
-        ToolGraphSceneImpl scene = new ToolGraphSceneImpl();
+        scene = new ToolGraphSceneImpl();
         JComponent view = scene.createView();
         scenePanel.setViewportView(view);
         add(scene.createSatelliteView(), BorderLayout.EAST);
@@ -141,13 +144,59 @@ public final class CoreTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jButtonSave = new javax.swing.JButton();
+        jButtonLoad = new javax.swing.JButton();
+        jButtonClear = new javax.swing.JButton();
         scenePanel = new javax.swing.JScrollPane();
 
         setLayout(new java.awt.BorderLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonSave, org.openide.util.NbBundle.getMessage(CoreTopComponent.class, "CoreTopComponent.jButtonSave.text")); // NOI18N
+        jButtonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonSave);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonLoad, org.openide.util.NbBundle.getMessage(CoreTopComponent.class, "CoreTopComponent.jButtonLoad.text")); // NOI18N
+        jButtonLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLoadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonLoad);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonClear, org.openide.util.NbBundle.getMessage(CoreTopComponent.class, "CoreTopComponent.jButtonClear.text")); // NOI18N
+        jButtonClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClearActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonClear);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_END);
         add(scenePanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
+        scene.save();
+    }//GEN-LAST:event_jButtonSaveActionPerformed
+
+    private void jButtonLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoadActionPerformed
+        scene.load();
+    }//GEN-LAST:event_jButtonLoadActionPerformed
+
+    private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
+        scene.clear();
+    }//GEN-LAST:event_jButtonClearActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonClear;
+    private javax.swing.JButton jButtonLoad;
+    private javax.swing.JButton jButtonSave;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane scenePanel;
     // End of variables declaration//GEN-END:variables
     @Override

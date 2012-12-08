@@ -6,7 +6,7 @@ fri.cbw.GenericTool.AbstractModelTool
 javafx.collections.FXCollections
 javafx.scene.chart.XYChart
 org.netbeans.api.visual.graph.GraphScene
-fri.cbw.GenericTool.AbstractEnginTool
+fri.cbw.GenericTool.AbstractEngineTool
 java.lang.Object
 fri.cbw.ToolGraph.ToolWrapper
 [Ljava.lang.String;

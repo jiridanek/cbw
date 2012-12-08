@@ -10,17 +10,19 @@ package fri.cbw.ToolGraph;
  */
 
 import fri.cbw.GenericTool.AbstractGenericTool;
+import fri.cbw.GenericTool.ToolTopComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.tools.Tool;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.openide.util.Lookup;
 
-public class ToolWrapper extends Object implements Transferable, Cloneable{
+public class ToolWrapper extends Object implements Transferable, Cloneable, Serializable{
    
    public static final DataFlavor DATA_FLAVOR = new DataFlavor(ToolWrapper.class, "tool");
    
@@ -93,6 +95,5 @@ public class ToolWrapper extends Object implements Transferable, Cloneable{
     public void setNodeGenericTool(AbstractGenericTool nodeGenericTool) {
         this.nodeGenericTool = nodeGenericTool;
     }
-
 
 }

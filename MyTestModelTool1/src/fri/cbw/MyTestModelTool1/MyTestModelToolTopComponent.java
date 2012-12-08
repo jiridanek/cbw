@@ -5,10 +5,7 @@
 package fri.cbw.MyTestModelTool1;
 
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolGraphSceneImpl;
 import fri.cbw.ToolGraph.ToolWrapper;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -16,26 +13,21 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(
-    dtd = "-//fri.cbw.MyTestModelTool1//MyTestModelTool//EN",
-autostore = false)
+
 @TopComponent.Description(
     preferredID = "MyTestModelToolTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @ActionID(category = "Window", id = "fri.cbw.MyTestModelTool1.MyTestModelToolTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(
-    displayName = "#CTL_MyTestModelToolAction",
-preferredID = "MyTestModelToolTopComponent")
+//*@ActionReference(path = "Menu/Window" /*, position = 333 */)
+
 @Messages({
     "CTL_MyTestModelToolAction=MyTestModelTool",
     "CTL_MyTestModelToolTopComponent=MyTestModelTool Window",
@@ -47,7 +39,8 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     private DefaultTableModel reactionsTableModel = new javax.swing.table.DefaultTableModel(new String [] { "Reactants", "K", "Products" }, 0);;
     
     
-    public MyTestModelToolTopComponent() {
+    public MyTestModelToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
+        super(scene, toolNode);
         initComponents();
         setName(Bundle.CTL_MyTestModelToolTopComponent());
         setToolTipText(Bundle.HINT_MyTestModelToolTopComponent());

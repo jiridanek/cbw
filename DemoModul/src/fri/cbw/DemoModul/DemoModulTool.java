@@ -11,7 +11,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AbstractModelTool.class)
 public class DemoModulTool extends AbstractModelTool {
-
+    
+    private String savedText;
+    
     @Override
     public String getName() {
         return "Demo Model Tool";
@@ -23,8 +25,23 @@ public class DemoModulTool extends AbstractModelTool {
     }
 
     @Override
-    public String getTopComponentName() {
-        return "DemoModulTopComponent";
+    public Class getTopComponentClass() {
+        return DemoModulTopComponent.class;
     }
+
+    /**
+     * @return the savedText
+     */
+    public String getSavedText() {
+        return savedText;
+    }
+
+    /**
+     * @param savedText the savedText to set
+     */
+    public void setSavedText(String savedText) {
+        this.savedText = savedText;
+    }
+
     
 }

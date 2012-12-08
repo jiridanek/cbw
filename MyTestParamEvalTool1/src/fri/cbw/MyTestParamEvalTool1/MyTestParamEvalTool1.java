@@ -23,11 +23,6 @@ public class MyTestParamEvalTool1 extends AbstractParamEvalTool{
     }
 
     @Override
-    public String getTopComponentName() {
-        return "MyTestParamEvalToolTopComponent";
-    }
-
-    @Override
     public String[] getSpecies() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -35,6 +30,11 @@ public class MyTestParamEvalTool1 extends AbstractParamEvalTool{
     @Override
     public String[][] getReactions() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Class getTopComponentClass() {
+        return MyTestParamEvalToolTopComponent.class;
     }
     
 }
