@@ -226,7 +226,6 @@ public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String>{
         for (TopComponent topComponent : odprti) {
             if (!(topComponent.getClass().toString().contains("fri.cbw.core.CoreTopComponent") 
                     || topComponent.getClass().toString().contains("PaletteTopComponent"))) {
-                System.out.println("Class: " + topComponent.getClass());
                 topComponent.close();
             }
         }

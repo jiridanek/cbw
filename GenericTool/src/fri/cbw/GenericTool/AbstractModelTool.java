@@ -4,40 +4,42 @@
  */
 package fri.cbw.GenericTool;
 
+import java.util.List;
+
 /**
  *
  * @author Sašo
  */
 public abstract class AbstractModelTool extends AbstractGenericTool {
     
-    private String[] species;
-    private String[][] reactions;
+    private List<String> species;
+    private List<AbstractReactionType> reactions;
 
     /**
      * @return the species
      */
-    public String[] getSpecies() {
+    public List<String> getSpecies() {
         return species;
     }
 
     /**
      * @param species the species to set
      */
-    public void setSpecies(String[] species) {
+    public void setSpecies(List<String> species) {
         this.species = species;
     }
 
     /**
      * @return the reactions
      */
-    public String[][] getReactions() {
+    public List<AbstractReactionType> getReactions() {
         return reactions;
     }
 
     /**
      * @param reactions the reactions to set
      */
-    public void setReactions(String[][] reactions) {
+    public void setReactions(List<AbstractReactionType> reactions) {
         this.reactions = reactions;
     }
     

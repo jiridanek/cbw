@@ -4,8 +4,15 @@
  */
 package fri.cbw.MyTestModelTool1;
 
+import fri.cbw.GenericTool.AbstractModelTool;
+import fri.cbw.GenericTool.AbstractReactionType;
 import fri.cbw.GenericTool.ToolTopComponent;
 import fri.cbw.ToolGraph.ToolWrapper;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +43,7 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 public final class MyTestModelToolTopComponent extends ToolTopComponent {
     
     private DefaultTableModel speciesTableModel = new javax.swing.table.DefaultTableModel( new String [] { "Species" }, 0 );
-    private DefaultTableModel reactionsTableModel = new javax.swing.table.DefaultTableModel(new String [] { "Reactants", "K", "Products" }, 0);;
+    private DefaultTableModel reactionsTableModel = new javax.swing.table.DefaultTableModel(new String [] { "Reactants", "K (on)", "K (off)", "Products" }, 0);
     
     
     public MyTestModelToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
@@ -44,17 +51,53 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         initComponents();
         setName(Bundle.CTL_MyTestModelToolTopComponent());
         setToolTipText(Bundle.HINT_MyTestModelToolTopComponent());
+        
+        evaluateComponents();
     }
     
-    public String[] getSpeciesList(){
-        Vector data = speciesTableModel.getDataVector();
-        String[] list = new String[data.size()];
-        
-        for(int i = 0; i < data.size(); i++){
-            list[i] = (String) ((Vector)data.get(i)).get(0);
+    private void evaluateComponents() {
+        /* filling the species table */
+        List<String> species = ((AbstractModelTool)getGenericTool()).getSpecies();
+        if(species != null){
+            for (String specie : species) {
+                speciesTableModel.addRow( new String[] {specie});
+            }
         }
         
+        /* filling the reactions table */
+        List<AbstractReactionType> reactions = ((AbstractModelTool)getGenericTool()).getReactions();
+        if(reactions != null){
+            for (AbstractReactionType reaction : reactions) {
+                speciesTableModel.addRow(((MyTestModelReactionTypeImpl)reaction).getReaction());
+            }
+        }
+    }
+    
+    
+    public List<String> getSpeciesList(){
+        Vector data = speciesTableModel.getDataVector();
+        if(data.isEmpty()) {
+            return new ArrayList<String>();
+        }
+        List list = new ArrayList<String>(data);
+        
         return list;
+    }
+    
+    private List<AbstractReactionType> getReactionList() {
+        Vector data = reactionsTableModel.getDataVector();
+        List reactions = new ArrayList<MyTestModelReactionTypeImpl>();
+        
+        if(data.isEmpty()) 
+            return reactions;
+            
+        for (Iterator it = data.iterator(); it.hasNext();) {
+            it.next();
+            MyTestModelReactionTypeImpl reaction = new MyTestModelReactionTypeImpl();
+            reaction.setReaction((String[])((Vector)it).toArray());
+        }
+        
+        return reactions;
     }
     
     private MyTestModelTool1 getMyTestModelTool(){
@@ -97,8 +140,6 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         jComboBoxKOff = new javax.swing.JComboBox();
         jButtonDialogCancle = new javax.swing.JButton();
         jButtonDialogOK = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jButtonAddSpecies = new javax.swing.JButton();
         jButtonDeleteSpecies = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -124,7 +165,8 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         jTextFieldReactantsSum.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldReactantsSum.text")); // NOI18N
 
         jComboBoxSpecies1.setModel(
-            new javax.swing.DefaultComboBoxModel(getSpeciesList())
+            new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()))
+
         );
         jComboBoxSpecies1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,7 +184,7 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         });
 
         jComboBoxSpecies2.setModel(
-            new javax.swing.DefaultComboBoxModel(getSpeciesList())
+            new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()))
         );
 
         jTextFieldReactants.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldReactants.text")); // NOI18N
@@ -295,19 +337,6 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
 
         jLabel1.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel1.AccessibleContext.accessibleName")); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
         org.openide.awt.Mnemonics.setLocalizedText(jButtonAddSpecies, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButtonAddSpecies.text")); // NOI18N
         jButtonAddSpecies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -323,6 +352,11 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         });
 
         jTableReactions.setModel(reactionsTableModel);
+        jTableReactions.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTableReactionsPropertyChange(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTableReactions);
         jTableReactions.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTableReactions.columnModel.title0_2")); // NOI18N
         jTableReactions.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTableReactions.columnModel.title1_2")); // NOI18N
@@ -406,8 +440,8 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     }//GEN-LAST:event_jButtonDeleteSpeciesActionPerformed
     
     private void jButtonAddReactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddReactionActionPerformed
-        jComboBoxSpecies1.setModel(new javax.swing.DefaultComboBoxModel(getSpeciesList()));
-        jComboBoxSpecies2.setModel(new javax.swing.DefaultComboBoxModel(getSpeciesList()));
+        jComboBoxSpecies1.setModel(new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()) ));
+        jComboBoxSpecies2.setModel(new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()) ));
         jDialog1.setVisible(true);
         
     }//GEN-LAST:event_jButtonAddReactionActionPerformed
@@ -471,6 +505,12 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
             getMyTestModelTool().setSpecies(getSpeciesList());
         }
     }//GEN-LAST:event_jTableSpeciesPropertyChange
+
+    private void jTableReactionsPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableReactionsPropertyChange
+        if("tableCellEditor".equals(evt.getPropertyName())){
+            getMyTestModelTool().setReactions(getReactionList());
+        }
+    }//GEN-LAST:event_jTableReactionsPropertyChange
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton5;
@@ -491,11 +531,9 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelKOff;
     private javax.swing.JLabel jLabelKOn;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTableReactions;
     private javax.swing.JTable jTableSpecies;
     private javax.swing.JTextField jTextFieldKOff;

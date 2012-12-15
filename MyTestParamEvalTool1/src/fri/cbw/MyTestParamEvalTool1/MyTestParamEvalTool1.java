@@ -22,15 +22,6 @@ public class MyTestParamEvalTool1 extends AbstractParamEvalTool{
         return "Janez";
     }
 
-    @Override
-    public String[] getSpecies() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String[][] getReactions() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     public Class getTopComponentClass() {

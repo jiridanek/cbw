@@ -7,6 +7,7 @@ package fri.cbw.MyTestEnginTool1;
 import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.ToolGraph.ToolWrapper;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
@@ -53,12 +54,12 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
         ToolWrapper prev = ((ToolWrapper)tool).getPrevNode(scene);
         AbstractModelTool mt = (AbstractModelTool) prev.getNodeGenericTool();
         
-        String [] species = mt.getSpecies();
+        List<String> species = mt.getSpecies();
         
-        LineChart.Series<Double,Double> [] es = new LineChart.Series[species.length];
+        LineChart.Series<Double,Double> [] es = new LineChart.Series[species.size()];
         
-        for (int i = 0; i < species.length; i++) {
-            es[i] = new LineChart.Series<Double,Double>(species[i], FXCollections.observableArrayList(
+        for (int i = 0; i < species.size(); i++) {
+            es[i] = new LineChart.Series<Double,Double>(species.get(i), FXCollections.observableArrayList(
                new XYChart.Data<Double,Double>(0.0, 1.0 + i),
                new XYChart.Data<Double,Double>(1.2, 1.4 + i),
                new XYChart.Data<Double,Double>(2.2, 1.9 + i),
