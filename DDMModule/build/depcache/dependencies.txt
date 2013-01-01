@@ -1,4 +1,0 @@
-||:fri.cbw.ddmmodule.DDMParamsEvalTool
-fri.cbw.GenericTool.AbstractParamEvalTool
-java.lang.UnsupportedOperationException
-fri.cbw.ddmmodule.DDMParamsEvalTool
