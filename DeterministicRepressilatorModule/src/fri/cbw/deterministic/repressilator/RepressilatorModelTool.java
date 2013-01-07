@@ -10,7 +10,7 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Class that represent deterministic repressilator model
  * @author miha
  */
 @ServiceProvider(service = AbstractModelTool.class)
@@ -20,6 +20,10 @@ public class RepressilatorModelTool extends AbstractDeterministicModelTool {
     
     private RepressilatorODE ode;
     
+    /**
+     * Returns the differential equations system
+     * @return 
+     */
     @Override
     public FirstOrderDifferentialEquations getOde() {
         if(ode==null) {

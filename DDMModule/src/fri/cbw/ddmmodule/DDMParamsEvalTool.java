@@ -21,7 +21,8 @@ import org.apache.commons.math3.ode.nonstiff.EulerIntegrator;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Class which implements Direct Differential Method sensitivity analysis of 
+ * deterministic biological systems
  * @author miha
  */
 @ServiceProvider(service = AbstractParamEvalTool.class)
@@ -56,6 +57,11 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
     
     private boolean normalizeResultsAfterCalculation=true;
     
+    /**
+     * Updates the engine properties from current model in the tool graph.
+     * @param toolWrapper
+     * @param scene 
+     */
     public void updateFromModel(Object toolWrapper, org.netbeans.api.visual.graph.GraphScene scene){
         ToolWrapper prev = ((ToolWrapper)toolWrapper).getPrevNode(scene);
         AbstractGenericTool prevTool = prev.getNodeGenericTool();
@@ -94,20 +100,31 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
     
     
         
-    //@Override
+    /**
+     * Runs the execution of DDM with current properties.
+     * @param toolWrapper
+     * @param scene 
+     */   
     public void calculate(Object toolWrapper, org.netbeans.api.visual.graph.GraphScene scene) {
         resultsAvailable=false;
+        
+        //First we update the properties
         this.updateFromModel(toolWrapper, scene);
         
+        //we need parameterizedODE for parameter evaluation
         ParameterizedODE pOde=(ParameterizedODE)ode;
         
+        //Define the integrator for differential equations
         EulerIntegrator integrator=new EulerIntegrator(deltaT);
         
+        //calculate result sample frequency
         int sampleFreq=(int)(simulationTime/(deltaT*(this.numberOfSamples)));
         
+        //load the parameters from the model
         String[] parameterNames = pOde.getParametersNames().toArray(new String[0]);
         numberOfParameters=parameterNames.length;
         
+        //initialize result arrays
         this.tSamples=new double[numberOfSamples+1];
         int groupsCount = 1+numberOfEquations+numberOfParameters;
         
@@ -118,6 +135,7 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
             this.resultNames[i]=equationNames;
         }
         
+        //initialize chart titles
         this.chartTitles=new String[groupsCount];
         this.chartTitles[0]="System chart";
         for (int i = 0 ; i < numberOfEquations; i++) {
@@ -144,7 +162,7 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
         
         double[] y0=new double[numberOfEquations];
         
-        
+        //set the initial values of the equations
         for (int i = 0; i < numberOfEquations; i++) {
             y0[i]=this.initialValues.get(equationNames[i]);
         }
@@ -154,9 +172,10 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
         for (int i = 0; i < hYArray.length; i++) {
             hYArray[i]=this.hY.get(equationNames[i]);
         }
-        
+        //initialize jacobian matrices
         JacobianMatrices jacobianMatrices=new JacobianMatrices(ode, hYArray, parameterNames);
         
+        //attach jacobianMatrices to the ODE
         jacobianMatrices.setParameterizedODE(pOde);
         
         for (int i = 0; i < parameterNames.length; i++) {
@@ -170,7 +189,7 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
         
         jacobianMatrices.registerVariationalEquations(esOde);
         
-        
+        //run the evaluation
         integrator.integrate(esOde, simulationTime);
         
         if(normalizeResultsAfterCalculation){

@@ -13,11 +13,12 @@ import org.apache.commons.math3.ode.ParameterizedODE;
 import org.apache.commons.math3.ode.UnknownParameterException;
 
 /**
- *
+ * Class that implements repressilator differential equations
  * @author miha
  */
 public class RepressilatorODE implements FirstOrderDifferentialEquations, ParameterizedODE {
     
+    //differential equation parameters
     private double kTranslacija=0.0430;
     private double kDegradMono=0.0007;
     private double kTranskripcija=0.0715;
@@ -119,7 +120,15 @@ public class RepressilatorODE implements FirstOrderDifferentialEquations, Parame
     public int getDimension() {
         return 6;
     }
-
+    
+    /**
+     * Method calculates next state of the ODE from previous state
+     * @param t
+     * @param y
+     * @param yDot
+     * @throws MaxCountExceededException
+     * @throws DimensionMismatchException 
+     */
     @Override
     public void computeDerivatives(double t, double[] y, double[] yDot) throws MaxCountExceededException, DimensionMismatchException {
         double alpha = kTranskripcija;

@@ -16,7 +16,8 @@ import org.apache.commons.math3.ode.nonstiff.EulerIntegrator;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Class for representing engine for running deterministic biological systems
+ * which are presented with first order differential equations.
  * @author miha
  */
 @ServiceProvider(service = AbstractEngineTool.class)
@@ -24,6 +25,8 @@ public class EulerDeterministicEngine extends AbstractEngineTool implements Shee
     
     private double deltaT=0.1;
     private double simulationTime=100000;
+    
+    //No of samples to capture during execution
     private int numberOfSamples=500;
         
     transient private boolean resultsAvailable=false;
@@ -43,6 +46,11 @@ public class EulerDeterministicEngine extends AbstractEngineTool implements Shee
     private Map<String,Double> initialValues;
     private String[] chartTitles=new String[]{"Repressilator"};
     
+    /**
+     * Updates the engine properties from current model in the tool graph.
+     * @param toolWrapper
+     * @param scene 
+     */
     public void updateFromModel(Object toolWrapper, org.netbeans.api.visual.graph.GraphScene scene){
         ToolWrapper prev = ((ToolWrapper)toolWrapper).getPrevNode(scene);
         AbstractGenericTool prevTool = prev.getNodeGenericTool();
@@ -88,32 +96,41 @@ public class EulerDeterministicEngine extends AbstractEngineTool implements Shee
     }
     
     
-        
+    /**
+     * Runs the execution of engine with current properties.
+     * @param toolWrapper
+     * @param scene 
+     */    
     @Override
     public void calculate(Object toolWrapper, org.netbeans.api.visual.graph.GraphScene scene) {
         resultsAvailable=false;
+        //First we update the properties
         this.updateFromModel(toolWrapper, scene);
         
+        //Define the integrator for differential equations
         EulerIntegrator integrator=new EulerIntegrator(deltaT);
         
+        //calculate result sample frequency
         int sampleFreq=(int)(simulationTime/(deltaT*(this.numberOfSamples)));
         
+        //initialize result arrays
         this.tSamples=new double[numberOfSamples+1];
         this.results=new double[1][numberOfSamples+1][numberOfEquations];
         this.resultNames=new String[][]{deterministicModel.getEquationNames()};
         
+        //initialize step handler for logging the state during execution
         FixedStepHandler stepHandler=new FixedStepHandler(this.tSamples, this.results, sampleFreq);
-        
         integrator.addStepHandler(stepHandler);
         
         double[] y0=new double[numberOfEquations];
         
         String[] equationNames=deterministicModel.getEquationNames();
-        
+        //set the initial values of the equations
         for (int i = 0; i < numberOfEquations; i++) {
             y0[i]=this.initialValues.get(equationNames[i]);
         }
         double[] y=new double[numberOfEquations];
+        //run the differential equation system
         integrator.integrate(ode, 0, y0, simulationTime, y);
         
         resultsAvailable=true;
