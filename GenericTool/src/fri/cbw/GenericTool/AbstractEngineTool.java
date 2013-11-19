@@ -4,6 +4,7 @@
  */
 package fri.cbw.GenericTool;
 
+import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import org.netbeans.api.visual.graph.GraphScene;
@@ -28,6 +29,7 @@ public abstract class AbstractEngineTool extends AbstractGenericTool{
     public ObservableList<XYChart.Series<Double,Double>> getLineChartData() {
         return lineChartData;
     }
+    
 
     /**
      * @param lineChartData the lineChartData to set

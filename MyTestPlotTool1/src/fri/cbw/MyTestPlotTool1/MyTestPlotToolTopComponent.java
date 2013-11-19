@@ -258,7 +258,7 @@ public final class MyTestPlotToolTopComponent extends ToolTopComponent {
 
         add(panel, BorderLayout.CENTER);
 
-        // create JavaFX scene
+        // create JavaFX scen
         Platform.runLater(new Runnable() {
             public void run() {
                 createScene();
@@ -281,7 +281,7 @@ public final class MyTestPlotToolTopComponent extends ToolTopComponent {
 
         panel.add(chartTablePanel, BorderLayout.CENTER);
         panel.add(jPanel1, BorderLayout.EAST);
-
+        
         add(panel, BorderLayout.CENTER);
 
         // create JavaFX scene
@@ -293,8 +293,8 @@ public final class MyTestPlotToolTopComponent extends ToolTopComponent {
     }
     
     public LineChart createLineChart(){
-        NumberAxis xAxis = new NumberAxis("Values for X-Axis", 0, 3, 1);
-        NumberAxis yAxis = new NumberAxis("Values for Y-Axis", 0, 3, 1);
+        NumberAxis xAxis = new NumberAxis("Values for X-Axis", 0, 4, 1);
+        NumberAxis yAxis = new NumberAxis("Values for Y-Axis", 0, 4, 1);
         
         ObservableList<XYChart.Series<Double,Double>> lineChartData = getLineCharData();
         

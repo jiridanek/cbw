@@ -1,0 +1,36 @@
+﻿Petrijeve Mreže Engine
+
+Za vse podrobnosti se obrnite na sekcijo Notes v Engine realizaciji PM.
+
+Trenutno je implementirano sledece:
+	-normalne PM,
+	-inhibitor,
+	-barvne PM,
+	-casovne PM,
+	-dosegljivost PM.
+
+Potrebni popravki:
+
+Inhibitor deluje le za črno barvo povezav (potrebno bi bilo posplošiti
+na več barv). Barvne PM so implementirane za 2 barvi - črna in rdeča. 
+Kako posplošiti na več barv? Ker se vsaka barva izvršuje kot samostojna 
+Petrijeva mreža v okviru ENEGA PROŽENJA, je bolj smiselno narediti klic 
+celotne funkcije izračuna PM v tem vrstnem redu: za vsako barvo rečemo 
+da je črna, izračunamo PM, nastavimo novo barvo na črno, izračunamo PM, ...
+med vsakim izračunom pogledamo, če je bilo možno narediti spremembo (proženje)
+s funkcijo comparationOfNextState(novoStanje, staroStanje), ki vrne true, 
+če je bilo možno proženje. Če je rezultat vsake comparationOfNextState==true, 
+potem je bilo možno narediti proženje - ponavljamo za vsa proženja.
+Časovne PM se da prilagodit, da tudi v računanju dosegljivosti predstavljajo 
+izhodiščni pogoj, kar pomeni da so poleg omejitve z globino in ciljnim stanjem, 
+omejen tudi s časom.
+
+Nove možne funkcije:
+
+Vpeljava tipov v barvne PM - se pravi žetoni so tipa String, Int, ... Takšne 
+so ponekod realizacije PM. Možne razširitve so še Stohastične PM, Boolove PM in 
+Funkcijske PM. Ker so PM dinamično orodje jih lahko tudi sami prilagodimo našim 
+željam in lahko vpeljemo kakšne nove vrste povezav, posebne žetone, ki se 
+uporabljajo pod določenimi pogoji, namesto žetonov količinske paketke, ki niso 
+vsi enake kapacitete, ...
+

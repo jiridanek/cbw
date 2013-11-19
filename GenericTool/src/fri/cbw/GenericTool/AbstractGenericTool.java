@@ -31,7 +31,7 @@ public abstract class AbstractGenericTool extends Object implements Serializable
             try {
                 tc = (ToolTopComponent) getTopComponentClass().getConstructor(GraphScene.class, IconNodeWidget.class).newInstance(scene, node);
             } catch (InstantiationException ex) {
-                Exceptions.printStackTrace(ex);  
+                Exceptions.printStackTrace(ex);
             } catch (IllegalAccessException ex) {
                 Exceptions.printStackTrace(ex);
             } catch (IllegalArgumentException ex) {

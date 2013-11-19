@@ -30,11 +30,6 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
     }
     
     @Override
-    public ObservableList<XYChart.Series<Double,Double>> getLineChartData() {
-        return getLineChartData();
-    }
-    
-    @Override
     public String getName() {
         return "MyTestEnginTool1";
     }
@@ -59,7 +54,7 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
         LineChart.Series<Double,Double> [] es = new LineChart.Series[species.size()];
         
         for (int i = 0; i < species.size(); i++) {
-            es[i] = new LineChart.Series<Double,Double>(species.get(i), FXCollections.observableArrayList(
+            es[i] = new LineChart.Series<Double,Double>( i == 0 ? "SpecA": "SpecB", FXCollections.observableArrayList(
                new XYChart.Data<Double,Double>(0.0, 1.0 + i),
                new XYChart.Data<Double,Double>(1.2, 1.4 + i),
                new XYChart.Data<Double,Double>(2.2, 1.9 + i),

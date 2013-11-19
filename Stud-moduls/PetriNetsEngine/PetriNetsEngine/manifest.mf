@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: fri.cbw.PNEngineTool
+OpenIDE-Module-Localizing-Bundle: fri/cbw/PNEngineTool/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -28,7 +28,7 @@ import java.awt.*;
 
 /**
  *
- * @author alex
+ * @author Sašo
  */
 public class SceneConnectProvider implements ConnectProvider {
     
