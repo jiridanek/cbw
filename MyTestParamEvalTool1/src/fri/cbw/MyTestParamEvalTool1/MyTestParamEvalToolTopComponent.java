@@ -4,10 +4,24 @@
  */
 package fri.cbw.MyTestParamEvalTool1;
 
+import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.GenericTool.ToolTopComponent;
+import fri.cbw.ToolGraph.ToolWrapper;
+import java.awt.Component;
+import java.awt.Container;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
@@ -46,12 +60,24 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(MyTestParamEvalToolTopComponent.class, "MyTestParamEvalToolTopComponent.jLabel1.text")); // NOI18N
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(100, 100));
 
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(MyTestParamEvalToolTopComponent.class, "MyTestParamEvalToolTopComponent.jTextField1.text")); // NOI18N
+        jPanel1.setMaximumSize(new java.awt.Dimension(100, 100));
+        jPanel1.setLayout(new java.awt.GridLayout(10, 2, 20, 20));
+        jScrollPane1.setViewportView(jPanel1);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(MyTestParamEvalToolTopComponent.class, "MyTestParamEvalToolTopComponent.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -59,25 +85,69 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addContainerGap(308, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(243, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //jPanel1 = new JPanel(new SpringLayout());
+        //jPanel1.add(new JLabel("Test9"));
+        jPanel1.setLayout(null);
+        jPanel1.removeAll();
+        
+        List<String> species = null; 
+        
+        try{
+            ToolWrapper tool = (ToolWrapper)getScene().findObject (getToolNode());
+            ToolWrapper prevTool = tool.getPrevNode(getScene());
+            AbstractModelTool gt = (AbstractModelTool) prevTool.getNodeGenericTool();
+            species = gt.getSpecies();
+        }catch(Exception e){
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Predhodni modul ne obstaja"));
+            return;
+        }
+
+        int i = 0;
+        
+        for (Object specie : species) {
+            i++;
+            
+            JLabel label = new JLabel(specie.toString(), JLabel.RIGHT);
+            label.setSize(100, 20);
+            label.setBounds(10, 30* i, 100, 20);
+            jPanel1.add(label);
+            
+            JTextField textField = new JTextField(10);
+            textField.setSize(100, 10);
+            label.setLabelFor(textField);
+            textField.setBounds(110, 30* i, 200, 20);
+            jPanel1.add(textField);
+        }
+        
+        
+        //revalidate and repaint
+        this.revalidate();
+        this.repaint();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
     @Override
     public void componentOpened() {
