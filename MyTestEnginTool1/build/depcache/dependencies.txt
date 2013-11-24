@@ -18,4 +18,5 @@ java.lang.Integer
 java.lang.Math
 java.lang.Double
 java.util.Set
+fri.cbw.GenericTool.AbstractModelTool
 java.util.logging.Level
