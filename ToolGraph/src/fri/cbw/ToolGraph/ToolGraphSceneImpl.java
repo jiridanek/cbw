@@ -4,6 +4,7 @@
  */
 package fri.cbw.ToolGraph;
 
+import fri.cbw.GenericTool.ToolWrapper;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.datatransfer.Transferable;
@@ -85,6 +86,7 @@ public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String>{
                 try {
                     t = (ToolWrapper) getToolFromTranferable(transferable).clone();
                     Widget w = ToolGraphSceneImpl.this.addNode(t);
+                    t.getNodeGenericTool().setNode(w);
                     w.setPreferredLocation(widget.convertLocalToScene(point));
                 } catch (CloneNotSupportedException ex) {
                     Exceptions.printStackTrace(ex);
@@ -196,9 +198,10 @@ public class ToolGraphSceneImpl extends GraphScene<ToolWrapper, String>{
                 node.getNodeGenericTool().getTc().doSave();
             }catch(Exception e){
                 e.printStackTrace();
-                DialogDisplayer.getDefault().notify(
-                        new NotifyDescriptor.Message("Prišlo je do napake pri shranjevanju orodja!"));
-                return;
+                /*DialogDisplayer.getDefault().notify(
+                        new NotifyDescriptor.Message("Prišlo je do napake pri shranjevanju orodja!"));*/
+                
+                //TODO javi uporabniku da je prišlo do napak
             }
         }
         

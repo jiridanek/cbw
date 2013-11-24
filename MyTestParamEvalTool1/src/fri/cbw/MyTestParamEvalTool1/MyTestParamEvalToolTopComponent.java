@@ -4,28 +4,23 @@
  */
 package fri.cbw.MyTestParamEvalTool1;
 
+import fri.cbw.CBWutil.CBWUtil;
+import fri.cbw.CBWutil.InboundConnectionException;
+import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.AbstractModelTool;
+import fri.cbw.GenericTool.AbstractParamEvalTool;
+import fri.cbw.GenericTool.AbstractSpecies;
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolWrapper;
 import java.awt.Component;
-import java.awt.Container;
-import java.util.List;
-import java.util.Vector;
-import javax.swing.JFrame;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
-import org.netbeans.api.settings.ConvertAsProperties;
-import org.netbeans.api.visual.graph.GraphScene;
-import org.netbeans.api.visual.widget.general.IconNodeWidget;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -45,12 +40,14 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 })
 public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
 
-    public MyTestParamEvalToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public MyTestParamEvalToolTopComponent(AbstractGenericTool genericTool) {
+        super(genericTool);
         initComponents();
         setName(Bundle.CTL_MyTestParamEvalToolTopComponent());
         setToolTipText(Bundle.HINT_MyTestParamEvalToolTopComponent());
-
+        
+        createFields(((AbstractParamEvalTool)getGenericTool()).getSpecies());
+        
     }
     
     /**
@@ -63,6 +60,7 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -79,6 +77,13 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(btnSave, org.openide.util.NbBundle.getMessage(MyTestParamEvalToolTopComponent.class, "MyTestParamEvalToolTopComponent.btnSave.text")); // NOI18N
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -86,7 +91,9 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jButton1)
-                .addContainerGap(308, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSave)
+                .addContainerGap(245, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -96,7 +103,9 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnSave))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
@@ -104,47 +113,36 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //jPanel1 = new JPanel(new SpringLayout());
-        //jPanel1.add(new JLabel("Test9"));
-        jPanel1.setLayout(null);
-        jPanel1.removeAll();
+        ((AbstractParamEvalTool)getGenericTool()).setSpecies(null);
         
-        List<String> species = null; 
+        LinkedHashMap<AbstractSpecies, Double> species = null; 
         
         try{
-            ToolWrapper tool = (ToolWrapper)getScene().findObject (getToolNode());
-            ToolWrapper prevTool = tool.getPrevNode(getScene());
-            AbstractModelTool gt = (AbstractModelTool) prevTool.getNodeGenericTool();
-            species = gt.getSpecies();
-        }catch(Exception e){
+            AbstractModelTool amt = (AbstractModelTool) getGenericTool().getFirstInboundModul();
+            species = amt.getSpecies();
+        }catch(InboundConnectionException e){
             DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Predhodni modul ne obstaja"));
             return;
         }
-
-        int i = 0;
-        
-        for (Object specie : species) {
-            i++;
-            
-            JLabel label = new JLabel(specie.toString(), JLabel.RIGHT);
-            label.setSize(100, 20);
-            label.setBounds(10, 30* i, 100, 20);
-            jPanel1.add(label);
-            
-            JTextField textField = new JTextField(10);
-            textField.setSize(100, 10);
-            label.setLabelFor(textField);
-            textField.setBounds(110, 30* i, 200, 20);
-            jPanel1.add(textField);
-        }
-        
-        
-        //revalidate and repaint
-        this.revalidate();
-        this.repaint();
+        createFields(species);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        
+        for(Component c : jPanel1.getComponents()){
+            if(c instanceof JLabel){
+                JTextField field = (JTextField) ((JLabel)c).getLabelFor();
+                Double val = CBWUtil.getDoubleZero(field.getText());
+                
+                AbstractParamEvalTool pt = (AbstractParamEvalTool)getGenericTool();
+                pt.addSpecies(((JLabel)c).getText(), val);
+                
+            }
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -169,6 +167,39 @@ public final class MyTestParamEvalToolTopComponent extends ToolTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    @Override
+    public void doSave() {
+        
+    }
+
+    private void createFields(LinkedHashMap<AbstractSpecies, Double> species) {
+        if(species == null)
+            return;
+        
+        jPanel1.setLayout(null);
+        jPanel1.removeAll();
+        
+        int i = 0;
+        for (Map.Entry<AbstractSpecies, Double> entry : species.entrySet()) {
+            JLabel label = new JLabel(entry.getKey().getName(), JLabel.RIGHT);
+            label.setSize(100, 20);
+            label.setBounds(10, 30* ++i, 100, 20);
+            jPanel1.add(label);
+            
+            JTextField textField = new JTextField(10);
+            textField.setSize(100, 10);
+            label.setLabelFor(textField);
+            textField.setBounds(110, 30* i, 200, 20);
+            textField.setText(entry.getValue().toString());
+            jPanel1.add(textField);
+            
+        }
+        
+        //revalidate and repaint
+        this.revalidate();
+        this.repaint();
     }
 
 }

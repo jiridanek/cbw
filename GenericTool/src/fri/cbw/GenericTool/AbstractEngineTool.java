@@ -4,8 +4,6 @@
  */
 package fri.cbw.GenericTool;
 
-import java.util.ArrayList;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import org.netbeans.api.visual.graph.GraphScene;
 
@@ -15,27 +13,26 @@ import org.netbeans.api.visual.graph.GraphScene;
  */
 public abstract class AbstractEngineTool extends AbstractGenericTool{
     
-    private transient ObservableList<XYChart.Series<Double,Double>>  lineChartData;
+    private transient XYChart chartData;
     /**
      * @param toolWrapper must be a type of ToolWrapper and is expected to be the EnginTool node
      * @param scene
      * @return 
      */
-    abstract public void calculate(Object toolWrapper, GraphScene scene);
+    abstract public void calculate();
 
     /**
      * @return the lineChartData
      */
-    public ObservableList<XYChart.Series<Double,Double>> getLineChartData() {
-        return lineChartData;
+    public XYChart getLineChartData() {
+        return chartData;
     }
     
-
     /**
      * @param lineChartData the lineChartData to set
      */
-    public void setLineChartData(ObservableList<XYChart.Series<Double,Double>> lineChartData) {
-        this.lineChartData = lineChartData;
+    public void setLineChartData(XYChart chartData) {
+        this.chartData = chartData;
     }
     
 }

@@ -18,6 +18,7 @@
  */
 package fri.cbw.ToolGraph;
 
+import fri.cbw.GenericTool.ToolWrapper;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.graph.GraphScene;

@@ -217,7 +217,7 @@ public class PNEngine extends AbstractEngineTool{
     private static boolean end=false;
     
     @Override
-    public void calculate(Object toolWrapper, org.netbeans.api.visual.graph.GraphScene scene) {
+    public void calculate() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

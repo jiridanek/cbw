@@ -4,25 +4,24 @@
  */
 package fri.cbw.BooleanModul;
 
+import fri.cbw.GenericTool.AbstractGenericTool;
+import fri.cbw.GenericTool.AbstractModelTool;
+import fri.cbw.GenericTool.AbstractReaction;
+import fri.cbw.GenericTool.ToolTopComponent;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import org.netbeans.api.visual.graph.GraphScene;
-import org.netbeans.api.visual.widget.general.IconNodeWidget;
-import org.openide.awt.ActionID;
-import org.openide.util.Exceptions;
-import org.openide.windows.TopComponent;
-import org.openide.util.NbBundle.Messages;
-import fri.cbw.GenericTool.AbstractModelTool;
-import fri.cbw.GenericTool.AbstractReactionType;
-import fri.cbw.GenericTool.ToolTopComponent;
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.openide.awt.ActionID;
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -40,17 +39,17 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 })
 public final class BooleanModelToolTopComponent extends ToolTopComponent {
 
-    public BooleanModelToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public BooleanModelToolTopComponent(AbstractGenericTool gt) {
+        super(gt);
         initComponents();
         setName(Bundle.CTL_BooleanModelToolTopComponent());
         setToolTipText(Bundle.HINT_BooleanModelToolTopComponent());
             
-        List<AbstractReactionType> reacts = (List<AbstractReactionType>) ((AbstractModelTool)getGenericTool()).getReactions();
+        List<AbstractReaction> reacts = (List<AbstractReaction>) ((AbstractModelTool)getGenericTool()).getReactions();
         if(reacts != null) {
             Vector<String> rules = new Vector<String>();
         
-            for(AbstractReactionType reakcija : reacts) {
+            for(AbstractReaction reakcija : reacts) {
                 BooleanModelFunctionsTypeImpl test = (BooleanModelFunctionsTypeImpl) reakcija;
                 rules.add(test.getBooleanFunctions());
             } 
@@ -168,7 +167,7 @@ public final class BooleanModelToolTopComponent extends ToolTopComponent {
       
                 //Read File Line By Line
                 Vector<String> rules = new Vector<String>();
-                List reactions = new ArrayList<BooleanModelFunctionsTypeImpl>();
+                ArrayList reactions = new ArrayList<BooleanModelFunctionsTypeImpl>();
                 
                 // Na jList dodajamo boolove funkcije
                 jList1.removeAll();
@@ -224,5 +223,10 @@ public final class BooleanModelToolTopComponent extends ToolTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    @Override
+    public void doSave() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -18,6 +18,7 @@
  */
 package fri.cbw.ToolGraph;
 
+import fri.cbw.GenericTool.ToolWrapper;
 import org.netbeans.api.visual.action.ConnectProvider;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.graph.GraphScene;
@@ -66,11 +67,20 @@ public class SceneConnectProvider implements ConnectProvider {
     
     int edgeCounter;
     public void createConnection(Widget sourceWidget, Widget targetWidget) {
-        String edge = "edge" + edgeCounter ++;
+        String edge = getNextEdge();
         scene.addEdge(edge);
         scene.setEdgeSource(edge, source);
         scene.setEdgeTarget(edge, target);
         scene.validate();
+    }
+    
+    public String getNextEdge(){
+        String edge = "edge" + edgeCounter++;
+        
+        while(scene.getEdges().contains(edge)){
+            edge = "edge" + ++edgeCounter;
+        }
+        return edge;
     }
     
 }

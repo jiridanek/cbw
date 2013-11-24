@@ -40,6 +40,7 @@ import javax.swing.table.AbstractTableModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 
 /**
  * SampleTableModel
@@ -102,11 +103,11 @@ public class SampleTableModel extends AbstractTableModel {
         fireTableCellUpdated(row, column);
     }
 
-    public ObservableList<BarChart.Series> getBarChartData() {
+    public ObservableList<XYChart.Series> getBarChartData() {
         if (bcData == null) {
             bcData = FXCollections.<BarChart.Series>observableArrayList();
             for (int row = 0; row < getRowCount(); row++) {
-                ObservableList<BarChart.Data> series = FXCollections.<BarChart.Data>observableArrayList();
+                ObservableList<XYChart.Data> series = FXCollections.<XYChart.Data>observableArrayList();
                 for (int column = 0; column < getColumnCount(); column++) {
                     series.add(new BarChart.Data(getColumnName(column), getValueAt(row, column)));
                 }

@@ -4,16 +4,15 @@
  */
 package fri.cbw.GenericTool;
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import org.netbeans.api.visual.graph.GraphScene;
+import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
-import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 
 /**
  *
@@ -21,15 +20,17 @@ import org.openide.windows.WindowManager;
  */
 public abstract class AbstractGenericTool extends Object implements Serializable{
     private transient ToolTopComponent tc;
+    private transient Widget node;
     
     abstract public String getName();
     abstract public String getAuthor();
     abstract public Class getTopComponentClass();
 
-    public void openEditor(GraphScene scene, IconNodeWidget node) {
-        if(tc == null){
+    public void openEditor() {
+        
+        if(getTc() == null){
             try {
-                tc = (ToolTopComponent) getTopComponentClass().getConstructor(GraphScene.class, IconNodeWidget.class).newInstance(scene, node);
+                tc = (ToolTopComponent) getTopComponentClass().getConstructor(AbstractGenericTool.class).newInstance(this);
             } catch (InstantiationException ex) {
                 Exceptions.printStackTrace(ex);
             } catch (IllegalAccessException ex) {
@@ -43,16 +44,28 @@ public abstract class AbstractGenericTool extends Object implements Serializable
             } catch (SecurityException ex) {
                 Exceptions.printStackTrace(ex);
             }finally{
-                if(tc == null){
+                if(getTc() == null){
                     DialogDisplayer.getDefault().notify(
                         new NotifyDescriptor.Message("Prišlo je do napake pri odpiranju maske"));
                     return;
                 }
             } 
         }
-        tc.open();
-        tc.requestActive();
+        getTc().open();
+        getTc().requestActive();
     }
+    
+    public ToolWrapper getToolWrapper(){
+        return (ToolWrapper) getScene().findObject(node);
+    }
+    
+    public AbstractGenericTool getFirstInboundModul() throws InboundConnectionException{
+        ToolWrapper tool = getToolWrapper();
+        ToolWrapper prevTool = tool.getPrevNode(getScene());
+        
+        return  prevTool.getNodeGenericTool();
+    }
+    
 
     /**
      * @return the tc
@@ -66,5 +79,27 @@ public abstract class AbstractGenericTool extends Object implements Serializable
      */
     public void setTc(ToolTopComponent tc) {
         this.tc = tc;
+    }
+
+    /**
+     * @return the scene
+     */
+    public GraphScene getScene() {
+        return (GraphScene) node.getScene();
+    }
+
+    /**
+     * @return the node
+     */
+    public Widget getNode() {
+        return node;
+        
+    }
+
+    /**
+     * @param node the node to set
+     */
+    public void setNode(Widget node) {
+        this.node = node;
     }
 }

@@ -4,15 +4,20 @@
  */
 package fri.cbw.MyTestEnginTool1;
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractModelTool;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.AbstractSpecies;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -25,8 +30,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class MyTestEnginTool1 extends AbstractEngineTool{
     
     @Override
-    public void calculate(Object toolWrapper, GraphScene scene) {
-        calculateData(toolWrapper, scene);
+    public void calculate() {
+        calculateData();
     }
     
     @Override
@@ -44,25 +49,37 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-
-    private void calculateData(Object tool, GraphScene scene) {
-        ToolWrapper prev = ((ToolWrapper)tool).getPrevNode(scene);
-        AbstractModelTool mt = (AbstractModelTool) prev.getNodeGenericTool();
-        
-        List<String> species = mt.getSpecies();
-        
-        LineChart.Series<Double,Double> [] es = new LineChart.Series[species.size()];
-        
-        for (int i = 0; i < species.size(); i++) {
-            es[i] = new LineChart.Series<Double,Double>( i == 0 ? "SpecA": "SpecB", FXCollections.observableArrayList(
-               new XYChart.Data<Double,Double>(0.0, 1.0 + i),
-               new XYChart.Data<Double,Double>(1.2, 1.4 + i),
-               new XYChart.Data<Double,Double>(2.2, 1.9 + i),
-               new XYChart.Data<Double,Double>(2.7, 2.3 + i),
-               new XYChart.Data<Double,Double>(2.9, 0.5 + i)
-           ));
+    
+    private void calculateData() {
+        try {        
+            AbstractModelTool mt = (AbstractModelTool)getFirstInboundModul();
+            LinkedHashMap<AbstractSpecies, Double> species = mt.getSpecies();
+            
+            NumberAxis xAxis = new NumberAxis();
+            xAxis.setLabel("Čas");
+            NumberAxis yAxis = new NumberAxis();
+            yAxis.setLabel("Količina");
+            
+            XYChart<Number,Number> lineChart = new LineChart<Number,Number>(xAxis,yAxis);
+            lineChart.setTitle("Testni podatki MyTestEnginTool");
+            
+            int cas = 20;
+            
+            for(AbstractSpecies as : species.keySet()){
+                XYChart.Series series = new XYChart.Series();
+                series.setName(as.getName());
+                
+                for(int i = 0; i <= cas; i++){    
+                    series.getData().add(new XYChart.Data(i, Math.random()*100));
+                }
+                lineChart.getData().add(series);
+            }
+            
+            setLineChartData(lineChart);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(MyTestEnginTool1.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        setLineChartData(FXCollections.observableArrayList(es));
     }
+    
 }

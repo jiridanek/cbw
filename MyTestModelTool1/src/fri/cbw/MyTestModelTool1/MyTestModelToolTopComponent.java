@@ -4,24 +4,23 @@
  */
 package fri.cbw.MyTestModelTool1;
 
+import fri.cbw.CBWutil.CBWUtil;
+import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.AbstractModelTool;
-import fri.cbw.GenericTool.AbstractReactionType;
+import fri.cbw.GenericTool.AbstractReaction;
+import fri.cbw.GenericTool.AbstractSpecies;
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolWrapper;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import fri.cbw.GenericTool.Unit;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 import java.util.Vector;
-import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
-import org.netbeans.api.settings.ConvertAsProperties;
-import org.netbeans.api.visual.graph.GraphScene;
-import org.netbeans.api.visual.widget.general.IconNodeWidget;
 import org.openide.awt.ActionID;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -44,10 +43,10 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     
     private DefaultTableModel speciesTableModel = new javax.swing.table.DefaultTableModel( new String [] { "Species" }, 0 );
     private DefaultTableModel reactionsTableModel = new javax.swing.table.DefaultTableModel(new String [] { "Reactants", "K (on)", "K (off)", "Products" }, 0);
+    private TestModulReactionImpl newReaction;
     
-    
-    public MyTestModelToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public MyTestModelToolTopComponent(AbstractGenericTool gt) {
+        super(gt);
         initComponents();
         setName(Bundle.CTL_MyTestModelToolTopComponent());
         setToolTipText(Bundle.HINT_MyTestModelToolTopComponent());
@@ -56,59 +55,45 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     }
     
     private void evaluateComponents() {
+        populateSpeciesTable();
+        populateReactionsTable();
+    }
+    
+    private void populateSpeciesTable() {
+        /* clear the table */
+        speciesTableModel = new javax.swing.table.DefaultTableModel( new String [] { "Species" }, 0 );
+        jTableSpecies.setModel(speciesTableModel);
+        
+        
         /* filling the species table */
-        List<String> species = ((AbstractModelTool)getGenericTool()).getSpecies();
+        LinkedHashMap<AbstractSpecies, Double> species = ((AbstractModelTool)getGenericTool()).getSpecies();
         if(species != null){
-            for (String specie : species) {
-                speciesTableModel.addRow( new String[] {specie});
+            for (AbstractSpecies specie : species.keySet()) {
+                speciesTableModel.addRow( new AbstractSpecies[] {specie});
             }
+        }
+    }
+    
+    private void populateReactionsTable() {
+        
+        /* clear the table */
+        for(int i = 0; i < reactionsTableModel.getRowCount(); i++){
+            reactionsTableModel.removeRow(i);
         }
         
         /* filling the reactions table */
-        List<AbstractReactionType> reactions = ((AbstractModelTool)getGenericTool()).getReactions();
+        List<AbstractReaction> reactions = ((AbstractModelTool)getGenericTool()).getReactions();
         if(reactions != null){
-            for (AbstractReactionType reaction : reactions) {
-                speciesTableModel.addRow(((MyTestModelReactionTypeImpl)reaction).getReaction());
+            for (AbstractReaction reaction : reactions) {
+                TestModulReactionImpl tmr  = ((TestModulReactionImpl)reaction);
+                
+                reactionsTableModel.addRow(new Object []{
+                    tmr.reactantsToString(), 
+                    tmr.getkOn(), 
+                    tmr.getkOff(), 
+                    tmr.productsToString()});
             }
         }
-    }
-    
-    
-    public List<String> getSpeciesList(){
-        Vector data = speciesTableModel.getDataVector();
-        if(data.isEmpty()) {
-            return new ArrayList<String>();
-        }
-        List list = new ArrayList<String>(data);
-        
-        return list;
-    }
-    
-    private List<AbstractReactionType> getReactionList() {
-        Vector data = reactionsTableModel.getDataVector();
-        List reactions = new ArrayList<MyTestModelReactionTypeImpl>();
-        
-        if(data.isEmpty()) 
-            return reactions;
-            
-        for (Iterator it = data.iterator(); it.hasNext();) {
-            it.next();
-            MyTestModelReactionTypeImpl reaction = new MyTestModelReactionTypeImpl();
-            reaction.setReaction((String[])((Vector)it).toArray());
-        }
-        
-        return reactions;
-    }
-    
-    private MyTestModelTool1 getMyTestModelTool(){
-        try{
-            ToolWrapper tw = (ToolWrapper)getScene().findObject (getToolNode());
-            return (MyTestModelTool1) tw.getNodeGenericTool();
-        }catch(ClassCastException e){
-            Logger.getAnonymousLogger().severe(e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
     }
     
     
@@ -119,14 +104,14 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDialog1 = new javax.swing.JDialog();
+        jDialogAddReaction = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldProductsSum = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldReactantsSum = new javax.swing.JTextField();
         jComboBoxSpecies1 = new javax.swing.JComboBox();
         jTextFieldProducts = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        btnAddProduct = new javax.swing.JButton();
         jComboBoxSpecies2 = new javax.swing.JComboBox();
         jTextFieldReactants = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
@@ -140,19 +125,26 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         jComboBoxKOff = new javax.swing.JComboBox();
         jButtonDialogCancle = new javax.swing.JButton();
         jButtonDialogOK = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jDialogAddSpecies = new javax.swing.JDialog();
+        jLabel3 = new javax.swing.JLabel();
+        fieldNewSpeciesName = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        btnNewSpeciesAdd = new javax.swing.JButton();
+        btnNewSpeciesCancel = new javax.swing.JButton();
         jButtonAddSpecies = new javax.swing.JButton();
         jButtonDeleteSpecies = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableReactions = new javax.swing.JTable();
         jButtonDeleteReaction = new javax.swing.JButton();
-        jButtonAddReaction = new javax.swing.JButton();
+        btnAddReaction = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableSpecies = new javax.swing.JTable();
 
-        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jDialog1.title")); // NOI18N
-        jDialog1.setMinimumSize(new java.awt.Dimension(540, 300));
-        jDialog1.setModal(true);
-        jDialog1.setResizable(false);
+        jDialogAddReaction.setTitle(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jDialogAddReaction.title")); // NOI18N
+        jDialogAddReaction.setMinimumSize(new java.awt.Dimension(540, 300));
+        jDialogAddReaction.setModal(true);
+        jDialogAddReaction.setResizable(false);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel1.text")); // NOI18N
 
@@ -164,28 +156,14 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         jTextFieldReactantsSum.setEditable(false);
         jTextFieldReactantsSum.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldReactantsSum.text")); // NOI18N
 
-        jComboBoxSpecies1.setModel(
-            new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()))
-
-        );
-        jComboBoxSpecies1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxSpecies1ActionPerformed(evt);
-            }
-        });
-
         jTextFieldProducts.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldProducts.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButton5.text")); // NOI18N
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(btnAddProduct, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.btnAddProduct.text")); // NOI18N
+        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnAddProductActionPerformed(evt);
             }
         });
-
-        jComboBoxSpecies2.setModel(
-            new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()))
-        );
 
         jTextFieldReactants.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldReactants.text")); // NOI18N
 
@@ -200,7 +178,7 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
 
         jTextFieldKOn.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldKOn.text")); // NOI18N
 
-        jComboBoxKOn.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Unit 1", "Unit 2", "Unit 3" }));
+        jComboBoxKOn.setModel(getUnits());
         jComboBoxKOn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxKOnActionPerformed(evt);
@@ -220,7 +198,7 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         jTextFieldKOff.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTextFieldKOff.text")); // NOI18N
         jTextFieldKOff.setEnabled(false);
 
-        jComboBoxKOff.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Unit 1", "Unit 2", "Unit 3" }));
+        jComboBoxKOff.setModel(getUnits());
         jComboBoxKOff.setEnabled(false);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonDialogCancle, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButtonDialogCancle.text")); // NOI18N
@@ -237,55 +215,59 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
             }
         });
 
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDialog1Layout.createSequentialGroup()
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel5.text")); // NOI18N
+
+        javax.swing.GroupLayout jDialogAddReactionLayout = new javax.swing.GroupLayout(jDialogAddReaction.getContentPane());
+        jDialogAddReaction.getContentPane().setLayout(jDialogAddReactionLayout);
+        jDialogAddReactionLayout.setHorizontalGroup(
+            jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialogAddReactionLayout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1)
-                            .addGroup(jDialog1Layout.createSequentialGroup()
-                                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBoxReversible)
-                                    .addGroup(jDialog1Layout.createSequentialGroup()
-                                        .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelKOn)
-                                            .addGroup(jDialog1Layout.createSequentialGroup()
-                                                .addComponent(jTextFieldKOn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jComboBoxKOn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(68, 68, 68)
-                                        .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jDialog1Layout.createSequentialGroup()
-                                                .addComponent(jTextFieldKOff, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jComboBoxKOff, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabelKOff))))
-                                .addGap(0, 153, Short.MAX_VALUE))
-                            .addGroup(jDialog1Layout.createSequentialGroup()
-                                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel1)
-                                    .addGroup(jDialog1Layout.createSequentialGroup()
+                                    .addGroup(jDialogAddReactionLayout.createSequentialGroup()
                                         .addComponent(jComboBoxSpecies1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextFieldProducts, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton5))
+                                        .addComponent(btnAddProduct))
                                     .addComponent(jTextFieldProductsSum))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel2)
-                                    .addGroup(jDialog1Layout.createSequentialGroup()
+                                    .addGroup(jDialogAddReactionLayout.createSequentialGroup()
                                         .addComponent(jComboBoxSpecies2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextFieldReactants, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButton6))
-                                    .addComponent(jTextFieldReactantsSum)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
+                                    .addComponent(jTextFieldReactantsSum)))
+                            .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBoxReversible)
+                                    .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                                        .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelKOn)
+                                            .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                                                .addComponent(jTextFieldKOn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jComboBoxKOn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(68, 68, 68)
+                                        .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                                                .addComponent(jTextFieldKOff, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jComboBoxKOff, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabelKOff)))
+                                    .addComponent(jLabel5))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogAddReactionLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonDialogOK)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -293,49 +275,114 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
                 .addContainerGap())
         );
 
-        jDialog1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBoxSpecies1, jComboBoxSpecies2});
+        jDialogAddReactionLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBoxSpecies1, jComboBoxSpecies2});
 
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jDialogAddReactionLayout.setVerticalGroup(
+            jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogAddReactionLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldProductsSum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldReactantsSum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxSpecies1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldProducts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxSpecies2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldReactants, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5)
+                    .addComponent(btnAddProduct)
                     .addComponent(jButton6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelKOn)
                     .addComponent(jLabelKOff))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBoxKOn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxKOff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldKOff, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldKOn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxReversible)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDialogAddReactionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonDialogCancle)
                     .addComponent(jButtonDialogOK))
                 .addContainerGap())
         );
 
         jLabel1.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel1.AccessibleContext.accessibleName")); // NOI18N
+
+        jDialogAddSpecies.setAlwaysOnTop(true);
+        jDialogAddSpecies.setMinimumSize(new java.awt.Dimension(210, 130));
+        jDialogAddSpecies.setResizable(false);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel3.text")); // NOI18N
+
+        fieldNewSpeciesName.setText(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.fieldNewSpeciesName.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel4.text")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnNewSpeciesAdd, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.btnNewSpeciesAdd.text")); // NOI18N
+        btnNewSpeciesAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewSpeciesAddActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnNewSpeciesCancel, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.btnNewSpeciesCancel.text")); // NOI18N
+        btnNewSpeciesCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewSpeciesCancelActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jDialogAddSpeciesLayout = new javax.swing.GroupLayout(jDialogAddSpecies.getContentPane());
+        jDialogAddSpecies.getContentPane().setLayout(jDialogAddSpeciesLayout);
+        jDialogAddSpeciesLayout.setHorizontalGroup(
+            jDialogAddSpeciesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogAddSpeciesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDialogAddSpeciesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addGroup(jDialogAddSpeciesLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jDialogAddSpeciesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnNewSpeciesAdd)
+                            .addComponent(fieldNewSpeciesName, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnNewSpeciesCancel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jDialogAddSpeciesLayout.setVerticalGroup(
+            jDialogAddSpeciesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialogAddSpeciesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDialogAddSpeciesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldNewSpeciesName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addContainerGap(55, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogAddSpeciesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jDialogAddSpeciesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNewSpeciesCancel)
+                    .addComponent(btnNewSpeciesAdd))
+                .addContainerGap())
+        );
+
+        jLabel4.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jLabel4.AccessibleContext.accessibleName")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonAddSpecies, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButtonAddSpecies.text")); // NOI18N
         jButtonAddSpecies.addActionListener(new java.awt.event.ActionListener() {
@@ -352,11 +399,6 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         });
 
         jTableReactions.setModel(reactionsTableModel);
-        jTableReactions.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jTableReactionsPropertyChange(evt);
-            }
-        });
         jScrollPane2.setViewportView(jTableReactions);
         jTableReactions.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTableReactions.columnModel.title0_2")); // NOI18N
         jTableReactions.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jTableReactions.columnModel.title1_2")); // NOI18N
@@ -369,19 +411,14 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
             }
         });
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonAddReaction, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.jButtonAddReaction.text")); // NOI18N
-        jButtonAddReaction.addActionListener(new java.awt.event.ActionListener() {
+        org.openide.awt.Mnemonics.setLocalizedText(btnAddReaction, org.openide.util.NbBundle.getMessage(MyTestModelToolTopComponent.class, "MyTestModelToolTopComponent.btnAddReaction.text")); // NOI18N
+        btnAddReaction.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddReactionActionPerformed(evt);
+                btnAddReactionActionPerformed(evt);
             }
         });
 
         jTableSpecies.setModel(speciesTableModel);
-        jTableSpecies.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jTableSpeciesPropertyChange(evt);
-            }
-        });
         jScrollPane3.setViewportView(jTableSpecies);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -401,7 +438,7 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDeleteSpecies)
                         .addGap(329, 329, 329)
-                        .addComponent(jButtonAddReaction)
+                        .addComponent(btnAddReaction)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDeleteReaction)))
                 .addContainerGap(173, Short.MAX_VALUE))
@@ -415,7 +452,7 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonAddReaction)
+                    .addComponent(btnAddReaction)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonAddSpecies)
                         .addComponent(jButtonDeleteSpecies)
@@ -435,32 +472,39 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         int row = jTableSpecies.getSelectedRow();
         
         if(row >= 0) {
+            ((AbstractModelTool)getGenericTool()).getSpecies().remove(
+                    (AbstractSpecies) speciesTableModel.getValueAt(row, 0));
             speciesTableModel.removeRow(row);
         }
     }//GEN-LAST:event_jButtonDeleteSpeciesActionPerformed
     
-    private void jButtonAddReactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddReactionActionPerformed
-        jComboBoxSpecies1.setModel(new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()) ));
-        jComboBoxSpecies2.setModel(new javax.swing.DefaultComboBoxModel(new Vector(getSpeciesList()) ));
-        jDialog1.setVisible(true);
+    private void btnAddReactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddReactionActionPerformed
+        clearDialog();
         
-    }//GEN-LAST:event_jButtonAddReactionActionPerformed
+        newReaction = new TestModulReactionImpl();
+        
+        AbstractSpecies[] items = ((AbstractModelTool)getGenericTool()).getSpecies().keySet().toArray(new AbstractSpecies[0]);
+        jComboBoxSpecies1.setModel( new javax.swing.DefaultComboBoxModel(items) );
+        jComboBoxSpecies2.setModel( new javax.swing.DefaultComboBoxModel(items) );
+        
+        jDialogAddReaction.setVisible(true);
+        
+    }//GEN-LAST:event_btnAddReactionActionPerformed
     
     private void jButtonAddSpeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddSpeciesActionPerformed
-        speciesTableModel.insertRow(0, new Object[] {""});
+        /* clear dialog */
+        fieldNewSpeciesName.setText("");
+        
+        jDialogAddSpecies.setVisible(true);
     }//GEN-LAST:event_jButtonAddSpeciesActionPerformed
 
-    private void jComboBoxSpecies1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSpecies1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBoxSpecies1ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        String products = jTextFieldProductsSum.getText();
-        products += (products == null || products.isEmpty())? "" : " + ";
-        products += jTextFieldProducts.getText() + " " + jComboBoxSpecies1.getSelectedItem().toString();
+    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
         
-        jTextFieldProductsSum.setText(products);
-    }//GEN-LAST:event_jButton5ActionPerformed
+        Double quantity = Double.parseDouble(jTextFieldProducts.getText());
+        newReaction.addProduct((AbstractSpecies)jComboBoxSpecies1.getSelectedItem(), quantity);
+        
+        jTextFieldProductsSum.setText(newReaction.productsToString());
+    }//GEN-LAST:event_btnAddProductActionPerformed
 
     private void jComboBoxKOnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxKOnActionPerformed
         // TODO add your handling code here:
@@ -471,25 +515,36 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     }//GEN-LAST:event_jCheckBoxReversibleActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        String reactants = jTextFieldReactantsSum.getText();
-        reactants += (reactants == null || reactants.isEmpty())? "" : " + ";
-        reactants += jTextFieldReactants.getText() + " " + jComboBoxSpecies2.getSelectedItem().toString();
+        Double quantity = Double.parseDouble(jTextFieldReactants.getText());
+        newReaction.addReactant((AbstractSpecies)jComboBoxSpecies2.getSelectedItem(), quantity);
         
-        jTextFieldReactantsSum.setText(reactants);
+        jTextFieldReactantsSum.setText(newReaction.reactantsToString());
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButtonDialogCancleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDialogCancleActionPerformed
-        clearDialog();
+        jDialogAddReaction.setVisible(false);
     }//GEN-LAST:event_jButtonDialogCancleActionPerformed
 
     private void jButtonDialogOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDialogOKActionPerformed
+        
+        Double kOn = CBWUtil.getDoubleZero(jTextFieldKOn.getText());
+        Double kOff = CBWUtil.getDoubleZero(jTextFieldKOff.getText());
+        
+        newReaction.setkOn(kOn);
+        newReaction.setkOnUnit(Unit.MOL);
+        newReaction.setkOff(kOff);
+        newReaction.setkOffUnit(Unit.MOL);
+        newReaction.setReversible(jCheckBoxReversible.isSelected());
+        
         reactionsTableModel.addRow(new Object []{ 
             jTextFieldReactantsSum.getText(), 
-            jTextFieldKOn.getText(), 
+            kOn, 
+            kOff,
             jTextFieldProductsSum.getText()});
         jTableReactions.setModel(reactionsTableModel);
         
-        clearDialog();
+        jDialogAddReaction.setVisible(false);
     }//GEN-LAST:event_jButtonDialogOKActionPerformed
 
     private void jButtonDeleteReactionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteReactionActionPerformed
@@ -500,22 +555,28 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         }
     }//GEN-LAST:event_jButtonDeleteReactionActionPerformed
 
-    private void jTableSpeciesPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableSpeciesPropertyChange
-        if("tableCellEditor".equals(evt.getPropertyName())){
-            getMyTestModelTool().setSpecies(getSpeciesList());
-        }
-    }//GEN-LAST:event_jTableSpeciesPropertyChange
+    private void btnNewSpeciesAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSpeciesAddActionPerformed
+        // Dodamo novo vrsto
+        ((AbstractModelTool)getGenericTool()).addSpecies(fieldNewSpeciesName.getText());
+        
+        //Zapremo dialog
+        jDialogAddSpecies.setVisible(false);
+        
+        //Osvežimo tabelo z vrstami
+        populateSpeciesTable();
+    }//GEN-LAST:event_btnNewSpeciesAddActionPerformed
 
-    private void jTableReactionsPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jTableReactionsPropertyChange
-        if("tableCellEditor".equals(evt.getPropertyName())){
-            getMyTestModelTool().setReactions(getReactionList());
-        }
-    }//GEN-LAST:event_jTableReactionsPropertyChange
+    private void btnNewSpeciesCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSpeciesCancelActionPerformed
+        jDialogAddSpecies.setVisible(false);
+    }//GEN-LAST:event_btnNewSpeciesCancelActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnAddProduct;
+    private javax.swing.JButton btnAddReaction;
+    private javax.swing.JButton btnNewSpeciesAdd;
+    private javax.swing.JButton btnNewSpeciesCancel;
+    private javax.swing.JTextField fieldNewSpeciesName;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButtonAddReaction;
     private javax.swing.JButton jButtonAddSpecies;
     private javax.swing.JButton jButtonDeleteReaction;
     private javax.swing.JButton jButtonDeleteSpecies;
@@ -526,9 +587,13 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
     private javax.swing.JComboBox jComboBoxKOn;
     private javax.swing.JComboBox jComboBoxSpecies1;
     private javax.swing.JComboBox jComboBoxSpecies2;
-    private javax.swing.JDialog jDialog1;
+    private javax.swing.JDialog jDialogAddReaction;
+    private javax.swing.JDialog jDialogAddSpecies;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelKOff;
     private javax.swing.JLabel jLabelKOn;
     private javax.swing.JScrollPane jScrollPane2;
@@ -574,13 +639,20 @@ public final class MyTestModelToolTopComponent extends ToolTopComponent {
         jTextFieldKOff.setText("");
         jCheckBoxReversible.setSelected(false);
         setKoff(false);
-        
-        jDialog1.setVisible(false);
     }
 
     private void setKoff(boolean enabled) {
         jComboBoxKOff.setEnabled(enabled);
         jTextFieldKOff.setEnabled(enabled);
         jLabelKOff.setEnabled(enabled);
+    }
+
+    @Override
+    public void doSave() {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private ComboBoxModel getUnits() {
+        return new DefaultComboBoxModel(Unit.values());
     }
 }

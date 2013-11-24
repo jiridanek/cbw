@@ -8,7 +8,7 @@ package fri.cbw.ToolPalette;
  *
  * @author Sašo
  */
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import java.awt.Image;

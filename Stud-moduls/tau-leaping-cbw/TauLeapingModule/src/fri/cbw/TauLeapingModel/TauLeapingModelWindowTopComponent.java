@@ -4,22 +4,14 @@
  */
 package fri.cbw.TauLeapingModel;
 
-import fri.cbw.GenericTool.AbstractModelTool;
-import fri.cbw.GenericTool.AbstractReactionType;
+import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
-import org.netbeans.api.settings.ConvertAsProperties;
-import org.netbeans.api.visual.graph.GraphScene;
-import org.netbeans.api.visual.widget.general.IconNodeWidget;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -39,8 +31,8 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 })
 public final class TauLeapingModelWindowTopComponent extends ToolTopComponent {
 
-    public TauLeapingModelWindowTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public TauLeapingModelWindowTopComponent(AbstractGenericTool gt) {
+        super(gt);
         initComponents();
         setName(Bundle.CTL_TauLeapingModelWindowTopComponent());
         setToolTipText(Bundle.HINT_TauLeapingModelWindowTopComponent());
@@ -402,7 +394,7 @@ public final class TauLeapingModelWindowTopComponent extends ToolTopComponent {
         tau.setK(k0_vector);
         tau.setX0(x0_vectors);
         
-        List reactions = new ArrayList<TauReaction>();
+        ArrayList reactions = new ArrayList<TauReaction>();
         reactions.add(tau);
         
         List species = new ArrayList<String>();
@@ -411,7 +403,7 @@ public final class TauLeapingModelWindowTopComponent extends ToolTopComponent {
         }
         
         getTauLeapModelTool().setReactions(reactions);
-        getTauLeapModelTool().setSpecies(reactions);
+        //getTauLeapModelTool().setSpecies(reactions);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -459,19 +451,17 @@ public final class TauLeapingModelWindowTopComponent extends ToolTopComponent {
         // TODO read your settings according to their version
     }
     
-    private void setReactions(List reactions) {
+    private void setReactions(ArrayList reactions) {
         getTauLeapModelTool().setReactions(reactions);
     }
        
     private TauLeapingModule getTauLeapModelTool(){
-        try{
-            ToolWrapper tw = (ToolWrapper)getScene().findObject (getToolNode());
-            return (TauLeapingModule) tw.getNodeGenericTool();
-        }catch(ClassCastException e){
-            Logger.getAnonymousLogger().severe(e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
+        return (TauLeapingModule) getGenericTool();
+    }
+
+    @Override
+    public void doSave() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
  
 }

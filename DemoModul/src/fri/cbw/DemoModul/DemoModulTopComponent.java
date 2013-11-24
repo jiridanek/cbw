@@ -5,9 +5,10 @@
 package fri.cbw.DemoModul;
 
 import fri.cbw.GenericTool.AbstractEngineTool;
+import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import java.util.logging.Logger;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -36,8 +37,8 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 })
 public final class DemoModulTopComponent extends ToolTopComponent {
 
-    public DemoModulTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public DemoModulTopComponent(AbstractGenericTool gt) {
+        super(gt);
         initComponents();
         setName(Bundle.CTL_DemoModulTopComponent());
         setToolTipText(Bundle.HINT_DemoModulTopComponent());
@@ -112,8 +113,8 @@ public final class DemoModulTopComponent extends ToolTopComponent {
         NotifyDescriptor nd = new NotifyDescriptor.Message("Predhodni modul JE ModelTool");
         
         try{
-            ToolWrapper tool = (ToolWrapper)getScene().findObject (getToolNode());
-            ToolWrapper prevTool = tool.getPrevNode(getScene());
+            ToolWrapper tool = (ToolWrapper)getGenericTool().getToolWrapper();
+            ToolWrapper prevTool = tool.getPrevNode(getGenericTool().getScene());
             AbstractModelTool gt = (AbstractModelTool) prevTool.getNodeGenericTool();
             
             nd = new NotifyDescriptor.Message("Predhodni modul JE ModelTool");
@@ -121,10 +122,11 @@ public final class DemoModulTopComponent extends ToolTopComponent {
         }catch(ClassCastException e){
             Logger.getAnonymousLogger().severe(e.getMessage());
             nd = new NotifyDescriptor.Message("Predhodni modul NI ModelTool");
-        }catch(NullPointerException e){
+        }catch(Exception e){
             Logger.getAnonymousLogger().severe(e.getMessage());
             nd = new NotifyDescriptor.Message("Predhodni modul ne obstaja");   
-        }finally {
+        }
+        finally {
             DialogDisplayer.getDefault().notify(nd);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -158,6 +160,11 @@ public final class DemoModulTopComponent extends ToolTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    @Override
+    public void doSave() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

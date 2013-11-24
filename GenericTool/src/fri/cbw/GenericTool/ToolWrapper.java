@@ -2,25 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fri.cbw.ToolGraph;
+package fri.cbw.GenericTool;
 
 /**
  *
  * @author Sašo
  */
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractGenericTool;
-import fri.cbw.GenericTool.ToolTopComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
-import javax.tools.Tool;
 import org.netbeans.api.visual.graph.GraphScene;
-import org.openide.util.Lookup;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 
 public class ToolWrapper extends Object implements Transferable, Cloneable, Serializable{
    
@@ -37,13 +36,14 @@ public class ToolWrapper extends Object implements Transferable, Cloneable, Seri
    }
    
    
-   public ToolWrapper getPrevNode(GraphScene scene) throws ClassCastException{
+   public ToolWrapper getPrevNode(GraphScene scene) throws ClassCastException, InboundConnectionException{
        Collection<String> edges = scene.findNodeEdges(this, false, true);
        if(edges != null && !edges.isEmpty()){
            String firstEdge = edges.iterator().next();
            return (ToolWrapper) scene.getEdgeSource(firstEdge);
        }
-       return null;
+       
+       throw new InboundConnectionException("Modul has no inbound connections");
    }
    
    

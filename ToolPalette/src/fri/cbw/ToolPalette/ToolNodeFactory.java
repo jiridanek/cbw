@@ -5,7 +5,7 @@
 package fri.cbw.ToolPalette;
 
 import fri.cbw.GenericTool.AbstractEngineTool;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import fri.cbw.GenericTool.AbstractModelTool;
 import fri.cbw.GenericTool.AbstractParamEvalTool;
 import fri.cbw.GenericTool.AbstractPlotTool;

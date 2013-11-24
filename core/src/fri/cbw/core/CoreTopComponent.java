@@ -7,16 +7,10 @@ package fri.cbw.core;
 import fri.cbw.ToolGraph.ToolGraphSceneImpl;
 import fri.cbw.ToolPalette.ToolTypeNodeFactory;
 import java.awt.BorderLayout;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.TransferHandler;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.spi.palette.PaletteActions;
 import org.netbeans.spi.palette.PaletteController;
@@ -26,11 +20,10 @@ import org.openide.awt.ActionReference;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
-import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.Lookups;
+import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
@@ -74,35 +67,9 @@ public final class CoreTopComponent extends TopComponent {
         JComponent view = scene.createView();
         scenePanel.setViewportView(view);
         add(scene.createSatelliteView(), BorderLayout.EAST);
-    }
-    
-    /*
-    private final class ToolTransferHandler extends TransferHandler{
         
-        @Override
-        public boolean canImport(TransferSupport support){
-            return support.isDataFlavorSupported(Tool.DATA_FLAVOR);
-        }
-        
-        @Override
-        public boolean importData(TransferSupport support){
-            try {
-                Tool tool = (Tool) support.getTransferable().getTransferData(Tool.DATA_FLAVOR);
-                
-                //jScrollPane1.add(this);
-                
-                return true;
-            } catch (UnsupportedFlavorException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-            return false;
-        }
+        this.repaint();
     }
-    */
-    
-    
     
     private static final class MyPaletteActions  extends PaletteActions {
       

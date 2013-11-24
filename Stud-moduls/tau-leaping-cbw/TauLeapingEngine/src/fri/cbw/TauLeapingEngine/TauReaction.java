@@ -1,6 +1,6 @@
 package fri.cbw.TauLeapingEngine;
 
-import fri.cbw.GenericTool.AbstractReactionType;
+import fri.cbw.GenericTool.AbstractReaction;
 
 /**
  *
@@ -24,7 +24,7 @@ import fri.cbw.GenericTool.AbstractReactionType;
  * Če je reakcija dvosmerna se to pretvori v dve vrstici v tabeli
  *
  */
-public class TauReaction extends AbstractReactionType {
+public class TauReaction extends AbstractReaction {
     
     private long[][] v; // vectors
     private long[][] indexes; // indexes of reactions

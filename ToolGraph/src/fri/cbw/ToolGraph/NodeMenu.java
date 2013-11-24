@@ -18,6 +18,7 @@
  */
 package fri.cbw.ToolGraph;
 
+import fri.cbw.GenericTool.ToolWrapper;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,7 +75,7 @@ public class NodeMenu implements PopupMenuProvider, ActionListener {
             scene.validate();
         }else if(e.getActionCommand().equals(EDIT_NODE_ACTION)){
             ToolWrapper tool = (ToolWrapper)scene.findObject (node);
-            tool.getNodeGenericTool().openEditor(scene, node);
+            tool.getNodeGenericTool().openEditor();
         }
     }
 

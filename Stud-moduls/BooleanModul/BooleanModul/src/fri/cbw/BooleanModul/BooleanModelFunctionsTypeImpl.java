@@ -4,7 +4,7 @@
  */
 package fri.cbw.BooleanModul;
 
-import fri.cbw.GenericTool.AbstractReactionType;
+import fri.cbw.GenericTool.AbstractReaction;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
@@ -13,7 +13,7 @@ import java.util.Vector;
  *
  * @author TadejJ
  */
-public class BooleanModelFunctionsTypeImpl extends AbstractReactionType implements Serializable{
+public class BooleanModelFunctionsTypeImpl extends AbstractReaction implements Serializable{
     
     private String booleanFunctions;
     

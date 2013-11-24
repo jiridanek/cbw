@@ -18,6 +18,7 @@
  */
 package fri.cbw.ToolGraph;
 
+import fri.cbw.GenericTool.ToolWrapper;
 import org.netbeans.api.visual.widget.Widget;
 import org.openide.util.Exceptions;
 import org.openide.xml.XMLUtil;

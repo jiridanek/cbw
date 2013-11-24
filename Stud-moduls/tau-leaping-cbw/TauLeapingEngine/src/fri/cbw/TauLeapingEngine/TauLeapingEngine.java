@@ -4,11 +4,15 @@
  */
 package fri.cbw.TauLeapingEngine;
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractModelTool;
-import fri.cbw.GenericTool.AbstractReactionType;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.AbstractReaction;
+import fri.cbw.GenericTool.ToolWrapper;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
@@ -26,13 +30,14 @@ import org.openide.util.lookup.ServiceProvider;
 public class TauLeapingEngine extends AbstractEngineTool{
     
     @Override
-    public void calculate(Object toolWrapper, GraphScene scene) {
-        calculateData(toolWrapper, scene);
-    }
-    
-    @Override
-    public ObservableList<XYChart.Series<Double,Double>> getLineChartData() {
-        return getLineChartData();
+    public void calculate() {
+        try {
+            calculateData();
+        } catch (ClassCastException ex) {
+            Logger.getLogger(TauLeapingEngine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(TauLeapingEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
@@ -51,12 +56,12 @@ public class TauLeapingEngine extends AbstractEngineTool{
     }
     
 
-    private void calculateData(Object tool, GraphScene scene) {
-        ToolWrapper prev = ((ToolWrapper)tool).getPrevNode(scene);
-        AbstractModelTool mt = (AbstractModelTool) prev.getNodeGenericTool();
+    private void calculateData() throws ClassCastException, InboundConnectionException {
         
-        List<String> species = mt.getSpecies();
-        List<AbstractReactionType> lala = mt.getReactions();
+        AbstractModelTool mt = (AbstractModelTool) getFirstInboundModul();
+        
+        List<String> species = new ArrayList();//mt.getSpecies();
+        List<AbstractReaction> lala = mt.getReactions();
         
         for(int i=0; i<lala.size(); i++) {
             TauReaction tr = (TauReaction) lala.get(i);
@@ -76,6 +81,6 @@ public class TauLeapingEngine extends AbstractEngineTool{
            ));
         }
         
-        setLineChartData(FXCollections.observableArrayList(es));
+        //setLineChartData(FXCollections.observableArrayList(es));
     }
 }
