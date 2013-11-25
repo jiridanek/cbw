@@ -4,9 +4,10 @@
  */
 package fri.cbw.sheekplot;
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javafx.application.Platform;
@@ -23,6 +24,7 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -44,8 +46,8 @@ public final class SheekPlotToolTopComponent extends ToolTopComponent {
     
     
     
-    public SheekPlotToolTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public SheekPlotToolTopComponent(AbstractGenericTool gt) {
+        super(gt);
         initComponents();
         setName(Bundle.CTL_SheekPlotToolTopComponent());
         setToolTipText(Bundle.HINT_SheekPlotToolTopComponent());
@@ -110,11 +112,13 @@ public final class SheekPlotToolTopComponent extends ToolTopComponent {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        ToolWrapper tw=(ToolWrapper) this.getToolWrapper();
         
-        ToolWrapper twPrev=tw.getPrevNode(this.getScene());
-        
-        AbstractGenericTool abTool=twPrev.getNodeGenericTool();
+        AbstractGenericTool abTool = null;
+        try {
+            abTool = getGenericTool().getFirstInboundModul();
+        } catch (InboundConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
         
         if(!(abTool instanceof SheekPlotEngine)) {
             DialogDisplayer.getDefault().notify(
@@ -229,5 +233,10 @@ public final class SheekPlotToolTopComponent extends ToolTopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    @Override
+    public void doSave() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

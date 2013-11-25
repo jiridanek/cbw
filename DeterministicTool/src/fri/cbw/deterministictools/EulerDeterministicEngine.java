@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fri.cbw.deterministic;
+package fri.cbw.deterministictools;
 
 import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractGenericTool;

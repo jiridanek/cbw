@@ -4,6 +4,7 @@
  */
 package fri.cbw.DemoModul;
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.AbstractModelTool;
@@ -113,16 +114,14 @@ public final class DemoModulTopComponent extends ToolTopComponent {
         NotifyDescriptor nd = new NotifyDescriptor.Message("Predhodni modul JE ModelTool");
         
         try{
-            ToolWrapper tool = (ToolWrapper)getGenericTool().getToolWrapper();
-            ToolWrapper prevTool = tool.getPrevNode(getGenericTool().getScene());
-            AbstractModelTool gt = (AbstractModelTool) prevTool.getNodeGenericTool();
+            AbstractModelTool gt = (AbstractModelTool) getGenericTool().getFirstInboundModul();
             
             nd = new NotifyDescriptor.Message("Predhodni modul JE ModelTool");
             
         }catch(ClassCastException e){
             Logger.getAnonymousLogger().severe(e.getMessage());
             nd = new NotifyDescriptor.Message("Predhodni modul NI ModelTool");
-        }catch(Exception e){
+        }catch(InboundConnectionException e){
             Logger.getAnonymousLogger().severe(e.getMessage());
             nd = new NotifyDescriptor.Message("Predhodni modul ne obstaja");   
         }

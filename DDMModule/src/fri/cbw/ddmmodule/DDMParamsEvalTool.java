@@ -4,9 +4,10 @@
  */
 package fri.cbw.ddmmodule;
 
+import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.AbstractParamEvalTool;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import fri.cbw.deterministic.AbstractDeterministicModelTool;
 import fri.cbw.deterministic.FixedStepHandler;
 import fri.cbw.sheekplot.SheekPlotEngine;
@@ -18,6 +19,7 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 import org.apache.commons.math3.ode.JacobianMatrices;
 import org.apache.commons.math3.ode.ParameterizedODE;
 import org.apache.commons.math3.ode.nonstiff.EulerIntegrator;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -63,12 +65,21 @@ public class DDMParamsEvalTool extends AbstractParamEvalTool implements SheekPlo
      * @param scene 
      */
     public void updateFromModel(Object toolWrapper, org.netbeans.api.visual.graph.GraphScene scene){
-        ToolWrapper prev = ((ToolWrapper)toolWrapper).getPrevNode(scene);
+        ToolWrapper prev = null;
+        try {
+            prev = ((ToolWrapper)toolWrapper).getPrevNode(scene);
+        } catch (ClassCastException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (InboundConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
         AbstractGenericTool prevTool = prev.getNodeGenericTool();
         
         if(!(prevTool instanceof AbstractDeterministicModelTool)) {
             throw new IllegalArgumentException("Input model tool must be Deterministic model");
+        } else {
         }
+        
         deterministicModel=(AbstractDeterministicModelTool)prevTool;
         
         ode=deterministicModel.getOde();

@@ -6,7 +6,7 @@ package fri.cbw.ddmmodule;
 
 import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.ToolTopComponent;
-import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.GenericTool.ToolWrapper;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
@@ -41,8 +41,8 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 })
 public final class DDMModuleTopComponent extends ToolTopComponent {
 
-    public DDMModuleTopComponent(GraphScene scene, IconNodeWidget toolNode) {
-        super(scene, toolNode);
+    public DDMModuleTopComponent(AbstractGenericTool gt) {
+        super(gt);
         initComponents();
         setName(Bundle.CTL_EulerDeterministicEngineTopComponent());
         setToolTipText(Bundle.HINT_EulerDeterministicEngineTopComponent());
@@ -324,9 +324,7 @@ public final class DDMModuleTopComponent extends ToolTopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private DDMParamsEvalTool getEngine(){
-        ToolWrapper tw=(ToolWrapper) this.getToolWrapper();
-        
-        AbstractGenericTool abTool=tw.getNodeGenericTool();
+        AbstractGenericTool abTool = getGenericTool();
         
         if(!(abTool instanceof DDMParamsEvalTool)) {
             throw new IllegalArgumentException("Associated engine must be of DDMParamsEvalTool type");
@@ -366,7 +364,7 @@ public final class DDMModuleTopComponent extends ToolTopComponent {
             DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Numbers parsing failed."));
         }
         
-        final GraphScene scene = this.getScene();
+        final GraphScene scene = getGenericTool().getScene();
 
         SwingWorker sw = new SwingWorker() {
             @Override
@@ -389,7 +387,7 @@ public final class DDMModuleTopComponent extends ToolTopComponent {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         DDMParamsEvalTool engine=getEngine();
         
-        engine.updateFromModel(this.getToolWrapper(), this.getScene());
+        engine.updateFromModel(this.getToolWrapper(), getGenericTool().getScene());
         
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         
@@ -527,6 +525,11 @@ public final class DDMModuleTopComponent extends ToolTopComponent {
                 hParameterValues.put(variableName, variableHValue);
             }
         }
+    }
+
+    @Override
+    public void doSave() {
+        
     }
     
     

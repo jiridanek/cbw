@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Data; 
 
 /**
  *

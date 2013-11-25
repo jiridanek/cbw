@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fri.cbw.deterministic;
+package fri.cbw.deterministictools;
 
 import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.ToolTopComponent;
 import fri.cbw.ToolGraph.ToolWrapper;
+import fri.cbw.deterministic.Bundle;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
@@ -257,8 +258,10 @@ public final class EulerDeterministicEngineTopComponent extends ToolTopComponent
         });
         parametersTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(parametersTable);
-        parametersTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.parametersTable.columnModel.title0")); // NOI18N
-        parametersTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.parametersTable.columnModel.title1")); // NOI18N
+        if (parametersTable.getColumnModel().getColumnCount() > 0) {
+            parametersTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.parametersTable.columnModel.title0")); // NOI18N
+            parametersTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.parametersTable.columnModel.title1")); // NOI18N
+        }
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -294,8 +297,10 @@ public final class EulerDeterministicEngineTopComponent extends ToolTopComponent
         });
         initialValuesTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(initialValuesTable);
-        initialValuesTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.initialValuesTable.columnModel.title0")); // NOI18N
-        initialValuesTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.initialValuesTable.columnModel.title1")); // NOI18N
+        if (initialValuesTable.getColumnModel().getColumnCount() > 0) {
+            initialValuesTable.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.initialValuesTable.columnModel.title0")); // NOI18N
+            initialValuesTable.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(EulerDeterministicEngineTopComponent.class, "EulerDeterministicEngineTopComponent.initialValuesTable.columnModel.title1")); // NOI18N
+        }
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
