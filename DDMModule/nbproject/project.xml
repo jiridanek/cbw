@@ -4,7 +4,7 @@
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>fri.cbw.ddmmodule</code-name-base>
-            <standalone/>
+            <suite-component/>
             <module-dependencies>
                 <dependency>
                     <code-name-base>fri.cbw.GenericTool</code-name-base>
@@ -24,6 +24,14 @@
                 </dependency>
                 <dependency>
                     <code-name-base>fri.cbw.commonsmath</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>fri.cbw.deterministic.tool</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

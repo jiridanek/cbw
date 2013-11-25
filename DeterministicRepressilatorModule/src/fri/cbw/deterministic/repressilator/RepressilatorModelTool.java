@@ -4,8 +4,9 @@
  */
 package fri.cbw.deterministic.repressilator;
 
+
 import fri.cbw.GenericTool.AbstractModelTool;
-import fri.cbw.deterministic.AbstractDeterministicModelTool;
+import fri.cbw.deterministic.tool.AbstractDeterministicModelTool;
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 import org.openide.util.lookup.ServiceProvider;
 
