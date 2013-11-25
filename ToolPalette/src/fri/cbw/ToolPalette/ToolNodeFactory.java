@@ -41,14 +41,14 @@ class ToolNodeFactory extends ChildFactory<ToolWrapper> {
                 list.add(tool);
             }
         }
-        else if("Plot Tools".equals(type)){
-            for(AbstractPlotTool at : Lookup.getDefault().lookupAll(AbstractPlotTool.class) ){
+        else if("Engine Tools".equals(type)){
+            for(AbstractEngineTool at : Lookup.getDefault().lookupAll(AbstractEngineTool.class) ){
                 ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
                 list.add(tool);
             }
         }
-        else if("Engine Tools".equals(type)){
-            for(AbstractEngineTool at : Lookup.getDefault().lookupAll(AbstractEngineTool.class) ){
+        else if("Plot Tools".equals(type)){
+            for(AbstractPlotTool at : Lookup.getDefault().lookupAll(AbstractPlotTool.class) ){
                 ToolWrapper tool = new ToolWrapper(at.getName(), at.getAuthor(), at);
                 list.add(tool);
             }

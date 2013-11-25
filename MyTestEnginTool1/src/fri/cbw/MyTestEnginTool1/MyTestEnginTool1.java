@@ -77,7 +77,7 @@ public class MyTestEnginTool1 extends AbstractEngineTool{
             
             setLineChartData(lineChart);
             
-        } catch (Exception ex) {
+        } catch (NullPointerException | InboundConnectionException ex) {
             Logger.getLogger(MyTestEnginTool1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
