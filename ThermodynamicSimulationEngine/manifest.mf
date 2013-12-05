@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: fri.cwb.ThermodynamicSimulationEngine
-OpenIDE-Module-Localizing-Bundle: fri/cwb/ThermodynamicSimulationEngine/Bundle.properties
+OpenIDE-Module-Localizing-Bundle: fri/cbw/ThermodynamicSimulationEngine/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0
 

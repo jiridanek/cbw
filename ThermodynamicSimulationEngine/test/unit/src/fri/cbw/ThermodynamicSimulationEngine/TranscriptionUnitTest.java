@@ -17,8 +17,9 @@
  *     Jirka Daněk <dnk@mail.muni.cz>
  */
 
-package fri.cwb.ThermodynamicSimulationEngine;
+package fri.cbw.ThermodynamicSimulationEngine;
 
+import fri.cbw.ThermodynamicSimulationEngine.TranscriptionUnit;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
@@ -36,7 +37,7 @@ public class TranscriptionUnitTest {
         // every branch in special cases
         // some borderline values: number = 0, number = N; number != 2 ;-)
         //  N = 0; N != 2
-    // possibly copy from Python testsuite
+    // possibly copy from Python testsuite ;-)
     @Test
     @Ignore
     public void testCombine() {
@@ -56,6 +57,12 @@ public class TranscriptionUnitTest {
     public void tCalExampleBasal() {
         TranscriptionUnit unit = new TranscriptionUnit(1000, -5.0f, 5e6f);
         assertEquals(0.028826971440739344, unit.baseBindingProb(), delta);
+    }
+
+    @Test
+    public void tCalExampleNoBinding() {
+        TranscriptionUnit unit = new TranscriptionUnit(1000, -5.0f, 5e6f);
+        assertEquals(unit.baseBindingProb(), unit.bindingProb(), delta);
     }
     
     @Test

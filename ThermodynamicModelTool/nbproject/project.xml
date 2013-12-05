@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.apisupport.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
-            <code-name-base>fri.cwb.ThermodynamicSimulationEngine</code-name-base>
+            <code-name-base>fri.cwb.ThermodynamicModelTool</code-name-base>
             <suite-component/>
             <module-dependencies>
                 <dependency>
@@ -15,27 +15,36 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>fri.cwb.ThermodynamicModelTool</code-name-base>
+                    <code-name-base>org.netbeans.api.visual</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <specification-version>1.0</specification-version>
+                        <specification-version>2.40.1</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>javafx</code-name-base>
+                    <code-name-base>org.netbeans.modules.settings</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <specification-version>1.0</specification-version>
+                        <release-version>1</release-version>
+                        <specification-version>1.42.1</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.openide.dialogs</code-name-base>
+                    <code-name-base>org.openide.awt</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <specification-version>7.32.1</specification-version>
+                        <specification-version>7.59.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.util</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>8.33.2</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -46,18 +55,17 @@
                         <specification-version>8.22.1</specification-version>
                     </run-dependency>
                 </dependency>
+                <dependency>
+                    <code-name-base>org.openide.windows</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>6.65.1</specification-version>
+                    </run-dependency>
+                </dependency>
             </module-dependencies>
-            <test-dependencies>
-                <test-type>
-                    <name>unit</name>
-                    <test-dependency>
-                        <code-name-base>org.netbeans.libs.junit4</code-name-base>
-                        <compile-dependency/>
-                    </test-dependency>
-                </test-type>
-            </test-dependencies>
             <public-packages>
-                <package>fri.cwb.ThermodynamicSimulationEngine</package>
+                <package>fri.cbw.ThermodynamicModelTool</package>
             </public-packages>
         </data>
     </configuration>

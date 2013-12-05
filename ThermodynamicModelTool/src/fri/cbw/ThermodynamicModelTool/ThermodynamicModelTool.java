@@ -12,43 +12,39 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * Contributors:
+ *     David Petrunov
+ *     Aleksander Bešir
  *     Jirka Daněk <dnk@mail.muni.cz>
- *     Biserka Cvetkovska
- *     Ivana Kostadinovska
  */
 
-package fri.cwb.ThermodynamicSimulationEngine;
-import fri.cbw.GenericTool.AbstractEngineTool;
-import javafx.collections.ObservableList;
-import javafx.scene.chart.XYChart;
+package fri.cbw.ThermodynamicModelTool;
+import fri.cbw.GenericTool.AbstractModelTool;
+// import fri.cbw.GenericTool.AbstractThermodynamicModelTool;
 import org.openide.util.lookup.ServiceProvider;
+
 
 /**
  *
+ * @author Petrunov, Bešir
  */
-@ServiceProvider(service = AbstractEngineTool.class)
-public class ThermodynamicSimulationEngine extends AbstractEngineTool{
+@ServiceProvider(service=AbstractModelTool.class)
+public class ThermodynamicModelTool extends AbstractModelTool { // used to be AbstractThermodynamicModelTool
 
     @Override
-    public void calculate() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
     public String getName() {
-        return "Thermodynamic Simulation Engine";
+        return "Thermodynamic Model Tool";
     }
 
     @Override
     public String getAuthor() {
-        return "";
+        return "PETRUNOV, BEŠIR";
     }
 
     @Override
     public Class getTopComponentClass() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }  
-    
+        return ThermodynamicModelToolTopComponent.class;
+    }
+
 }

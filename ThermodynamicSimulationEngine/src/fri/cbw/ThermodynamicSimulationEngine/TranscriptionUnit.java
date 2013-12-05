@@ -56,7 +56,7 @@
  * Contributors:
  *     Jirka Daněk <dnk@mail.muni.cz>
  */
-package fri.cwb.ThermodynamicSimulationEngine;
+package fri.cbw.ThermodynamicSimulationEngine;
 
 import static java.lang.Math.exp;
 import static java.lang.Math.pow;
@@ -119,7 +119,7 @@ public class TranscriptionUnit {
         float gpEnergy;
     }
     /**
-     * holds interaction enegy between a group of regulators or binding sites
+     * holds interaction energy between a group of regulators or binding sites
      * key: tuple of binding site ids (SORTED!)
      */
     Map<SortedSet<Integer>, EnergyConfig> interEnergy;
@@ -144,9 +144,11 @@ public class TranscriptionUnit {
     int regulatorSpeciesNumber;
 
     /**
+     * Defines (lexicographical, sort of) ordering on SortedSets.
+     * FIXME: Do we also need HashCode?
      * @param <T> Comparable type
      */
-    class SortedSetComparator<T extends Comparable<T>> implements Comparator<SortedSet<T>> {
+    static class SortedSetComparator<T extends Comparable<T>> implements Comparator<SortedSet<T>> {
         @Override
         public int compare(SortedSet<T> o1, SortedSet<T> o2) {
             /// FIXME: drop this, keep only the else branch
@@ -159,16 +161,19 @@ public class TranscriptionUnit {
             } else if (o2geto1) { // o2 > o1
                 return -1;
             } else {
+                // go through in order, compare values
+                int c;
                 Iterator<T> i1 = o1.iterator();
                 Iterator<T> i2 = o2.iterator();
                 while(i1.hasNext() && i2.hasNext()) {
                     T a = i1.next();
                     T b = i2.next();
-                    int c = a.compareTo(b);
+                    c = a.compareTo(b);
                     if (c != 0) {                        
                         return c;
                     }
                 }
+                // find which was shorter
                 boolean ahas = i1.hasNext();
                 boolean bhas = i2.hasNext();
                 if (!ahas && !bhas) {
@@ -209,8 +214,8 @@ public class TranscriptionUnit {
     /**
      * Adds one regulator.
      *
-     * // FIXME: probably not true in Java Notice: If the added regulator has
-     * been added before, tCal will not complain but will accept new
+     * Notice: If the added regulator has been added before,
+     * tCal will not complain but will accept new
      *
      * @param name number (obsolete)
      * @param rp_energy RNAP interaction energy
@@ -219,9 +224,11 @@ public class TranscriptionUnit {
         RegConfig config = new RegConfig();
         config.number = 0;
         config.rnapEnergy = rp_energy;
+        // if key exists, put() replaces with new value
+        // and add() leaves unchanged. This is OK here
         this.regConfig.put(name, config);
         this.regulatorNames.add(name);
-        this.occupVector.put(name, new ArrayList());
+        this.occupVector.put(name, new ArrayList<Integer>());
     }
 
     /**
@@ -434,6 +441,7 @@ public class TranscriptionUnit {
                         denomiPower += dE;
                     }
                 }
+                /// FIXME: the next comment is a lie
                 // check if any interaction group is subset of comSet
                 for (Map.Entry<SortedSet<Integer>, EnergyConfig> group : this.interEnergy.entrySet()) {
                     //groupSet = set(group) # convert tuple to set
