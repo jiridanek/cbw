@@ -329,14 +329,16 @@ public class TranscriptionUnit {
 
         if (number == this.bsNum) {
             set = new TreeSet<Integer>(this.bindingSites.keySet());
-            /// FIXME: superset question again
-            //if (this.hasForbidden) {
-                if (!this.forbiddenEvents.contains(set)) {
-                    result.add(set);
+            boolean isForbidden = false;
+            for (SortedSet<Integer> forbidden : this.forbiddenEvents) {
+                // verify if any of these events is a subset of our event
+                if (set.containsAll(forbidden)) {
+                    isForbidden = true;
                 }
-            //} else {
-                //result.add(set);
-            //}
+            }
+            if (!isForbidden) {
+                result.add(set);
+            }
             return result;
         }
 
