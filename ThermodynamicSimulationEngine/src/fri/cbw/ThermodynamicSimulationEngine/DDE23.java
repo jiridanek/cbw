@@ -50,8 +50,16 @@ import org.apache.commons.lang3.ArrayUtils;
  * NOTES:
  *
  * Compared to the original code, this class is subject to several limitations.
- * - Integration always starts at t = 0 - Events are not supported - The initial
- * state history is always given as a constant vector for t < 0
+ *
+ * - Integration always starts at t = 0
+ *
+ * - Events are not supported
+ * 
+ * - Options are not supported
+ * 
+ * - Discontinuities in the solution cannot be specified (we don't have options)
+ *
+ * - The initial state history is always given as a constant vector for t < 0
  */
 public class DDE23 {
 
