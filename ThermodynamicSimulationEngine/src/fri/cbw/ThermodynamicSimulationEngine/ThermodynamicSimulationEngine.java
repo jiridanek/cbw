@@ -137,7 +137,7 @@ public class ThermodynamicSimulationEngine extends AbstractEngineTool{
     }
 
     @Override
-    public Class getTopComponentClass() {
+    public Class<Object> getTopComponentClass() {
         calculate();
         throw new UnsupportedOperationException("Not supported yet.");
     }  
