@@ -30,19 +30,25 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 /**
- * Numerical simulation of an experiment done by Knorre in 1968.
+ * Numerical simulation of an experiment done by Knorre in 1968. The model is
+ * described in article Influence of Catabolite Repression and Inducer Exclusion
+ * on the Bistable Behavior of the lac Operon.
  */
 public class Knorre1968 {
 
     public void calculate() {
         PrintWriter writer = null;
 
-        //DDESystem system = new DDESystem(0.03, 0.2, 0.1, 0.8); // I have no idea where to get these, values are sortof random here
-        // probably better set of values
-        DDESystem system = new DDESystem(1.54542715e-04/1000, 1.54542715e-04/1000, 3.66546278e-02/1000, 4.26454251e-02/1000);
-
+        // I have no idea where to get these, values are sortof random here
+        //DDESystem system = new DDESystem(0.03, 0.2, 0.1, 0.8);
+        // probably better set of values obtained by process in the article
+        // run the previous, wait for steady state, divide by 1000
+        DDESystem system = new DDESystem(1.54542715e-04 / 1000, 1.54542715e-04 / 1000,
+                3.66546278e-02 / 1000, 4.26454251e-02 / 1000);
         DDE23.IntegrationResult result = DDE23.integrate(system, system.delays, system.initial, 0, 256);
+
         System.out.println("possibly break here with debugger");
+
         {
             try {
                 writer = new PrintWriter("/tmp/Knorre1968.csv", "UTF-8");
@@ -84,65 +90,82 @@ public class Knorre1968 {
 
     class DDESystem implements DDE23.FirstOrderDelayDifferentialEquations {
 
-        // for debugging
+        // log the computed fractional occupancy values for debugging
         public List<Double> fractionaloccupancyvalue = new ArrayList<Double>();
         public List<Double> fractionaloccupancytime = new ArrayList<Double>();
+
+        // we do not have to keep recreating this, we can just change
+        // the numer of molecules in each iteration
+        private TranscriptionUnit unit;
 
         // constants
         /**
          * CRP concentration
          */
         double CRP = 2.6; // uM
+
         /**
          * Total repressor concentration
          */
         double R_T = 2.9e-2; // uM
+
         /**
          * Equilibrium dissociation constant between CRP and cAMP
          */
         double K_CAP = 3.0; // uM
+
         /**
          * Time delay between transcription initiation and appearance of a lacZ
          * ribosome binding site
          */
         double tau_B = 5.1e-3; // min
+
         /**
          * Time delay between transcription initiation and appearance of a lacY
          * ribosome binding site
          */
         double tau_P = 0.1; // min
+
         /**
          * Growth rate
          */
         double mu = 0.02; // min^{-1}
+
         /**
          * mRNA degradation rate
          */
         double xi_M = 0.46; // min^{-1}
+
         /**
          * lac permease degradation rate
          */
         double xi_P = 0.01; // min^{-1}
+
         /**
          * lacY mRNA translation initiation rate
          */
         double k_P = 18.8; // min^{-1}
+
         /**
          * cAMP excretion and degradation rate
          */
         double xi_cAMP = 2.1; // min^{-1}
+
         /**
          * β-galactosidase degradation rate
          */
         double xi_B = 8.33e-4; // min^{-1}
+
         /**
          * lacZ mRNA translation initiation rate
          */
         double k_B = 18.8; // min^{-1}
+
         /**
          * Time delay due to translation of gene lacY
          */
         double T_P = 0.42; // min
+
         /**
          * Time delay due to translation of gene lacZ
          */
@@ -157,18 +180,22 @@ public class Knorre1968 {
          * lactose transport constant for inhibition by glucose
          */
         double PhiG1 = 2.71e2; // FIXME: I am putting here the value of PhiG2 since PhiG1 is not in the article.
+
         /**
          * Lactose transport constant for inhibition by glucose
          */
         double PhiG2 = 2.71e2; // uM
+
         /**
          * Lactose transport rate constant
          */
         double psiL1 = 1.08e3; // min^{-1}
+
         /**
          * Lactose transport saturation constant
          */
         double PhiL1 = 5.0e-2; // uM
+
         /**
          * Lactose hydrolysis rate
          */
@@ -182,6 +209,7 @@ public class Knorre1968 {
          * cAMP synthesis rate constant
          */
         double phicAMP = 5.5; // uM min^{-1}
+
         /**
          * cAMP synthesis saturation constant
          */
@@ -202,7 +230,7 @@ public class Knorre1968 {
          */
         double k_m = 0.18;
 
-        // variables // will need to move this up so it is visible
+        // indices of variables in DDE
         int M_B = 0; // TODO: use enum?
         int M_P = 1;
         int B = 2;
@@ -212,18 +240,23 @@ public class Knorre1968 {
 
         int idx_tau_B = 0;
         int idx_tau_P = 1;
-            //int cAMP = 6; // FIXME: should this be here?
 
-        // something in between
+        double mRNAP = 3.0; // uM
+
+        // we have a big bottle, therefore these concentrations
+        // practically do not change
+
         /**
          * extracellular glucose concentration
          */
         double G_E;
+
         /**
          * lactose concentration in the external medium
          */
         double L_E;
 
+        // this is part of the DDE
         public double[] delays;
         public double[] initial;
 
@@ -238,11 +271,16 @@ public class Knorre1968 {
             initial[P] = p;
             initial[cAMP_T] = 0.0;
             initial[A_T] = 0.0;
+
+            // conversion explained in initializeTranscriptionUnit at setRegMolNumber call
+            int tnapNumber = (int) Math.round((mRNAP * 1e-6) * (8.0e-16) * 6.022e23);
+            float genomeBg = (int) 5e9; // FIXME: play with this number and see what it does?
+            unit = initializeTranscriptionUnit(tnapNumber, genomeBg);
         }
 
         @Override
         public void computeDerivatives(double t, double[] vars, double[][] Z, double[] yPrime) {
-            double v_cAMP = phicAMP * (PhicAMP / (G_E + PhicAMP)); // FIXME: make sure I havent mixed this up
+            double v_cAMP = phicAMP * (PhicAMP / (G_E + PhicAMP)); // FIXME: make sure I havent mixed this up // probably ok
             double L_T = 2.0 * vars[A_T];
             double vL1 = psiL1 * ((L_E / (L_E + PhiL1)) * (PhiG1 / (PhiG1 + G_E)) - (L_T / (L_T + PhiL1))) * vars[P];
             double vL2 = psiL1 * (L_T / (L_T + PhiL2)) * vars[B];
@@ -250,7 +288,7 @@ public class Knorre1968 {
             double psi_tau_B = P1 * k_m * fractional(Z, idx_tau_B);
             double psi_tau_P = P1 * k_m * fractional(Z, idx_tau_P);
 
-            // log this
+            // record this for logging purposes
             fractionaloccupancyvalue.add(psi_tau_B);
             fractionaloccupancytime.add(t - tau_B);
             fractionaloccupancyvalue.add(psi_tau_P);
@@ -267,9 +305,13 @@ public class Knorre1968 {
             yPrime[A_T] = (vL1 - vL2) / 2 - (xi_A + mu) * vars[A_T];
         }
 
-        // FIXME: in the paper this also takes RNAP concentrations // actually, thats a constant
-        double mRNAP = 3.0; // uM
-
+        /**
+         * Computes fractional occupancy at delay tau_
+         *
+         * @param Z what computeDerivatives got as its Z
+         * @param tau_ index of the delay
+         * @return fractional occupancy
+         */
         private double fractional(double[][] Z, int tau_) {
             //TYPO?: replaced Z[cAMP][tau_] with Z[cAMP_T][tau_]
             final double[] ylag = Z[tau_];
@@ -278,6 +320,15 @@ public class Knorre1968 {
             double A = (ylag[A_T] - K_A - 4 * R_T) / 2.0 + 1.0 / 2.0 * Math.sqrt(Math.pow(ylag[A_T] - K_A - 4 * R_T, 2) + 4 * ylag[A_T] * K_A);
             double R = Math.pow(K_A / (K_A + A), 4) * R_T;
 
+            int tnapNumber = (int) Math.round((mRNAP * 1e-6) * (8.0e-16) * 6.022e23);
+            float genomeBg = (int) 5e9; // FIXME: play with this number and see what it does?
+            unit = initializeTranscriptionUnit(tnapNumber, genomeBg);
+            unit.setRegMolNumber("CAP", (int) Math.round((CAP * 1e-6) * (8.0e-16) * 6.022e23)); //for now try (moles/liter)*(volume of e-coli)*NA
+            unit.setRegMolNumber("cAMP", (int) Math.round((cAMP * 1e-6) * (8.0e-16) * 6.022e23));
+            return unit.bindingProb();
+        }
+
+        private TranscriptionUnit initializeTranscriptionUnit(int tnapNumber, float genomeBg) {
             float deltaG_2p = -10.20f;
             float deltaG_cp = -1.59f;
             float deltaG_1c = -10.68f;
@@ -289,9 +340,7 @@ public class Knorre1968 {
             float deltaG_13 = -7.70f;
             float deltaG_14 = -6.78f;
 
-            int tnapNumber = (int) Math.round((mRNAP * 1e-6) * (8.0e-16) * 6.022e23); // explained bellow at setRegMolNumber
-            float genomeBg = (int) 5e9; // FIXME: play with this number and see what it does?
-            TranscriptionUnit unit = new TranscriptionUnit(tnapNumber, deltaG_2p, genomeBg);
+            // create aliases for the sites
             int O3 = 0;
             int C1 = 1;
             int P1 = 2;
@@ -299,35 +348,36 @@ public class Knorre1968 {
             int C2 = 4;
             int O2 = 5;
 
-            unit.addRegulator("CAP", 0.0f); // paper says nothing, assuming zero
-            unit.addRegulator("cAMP", deltaG_cp);
+            TranscriptionUnit transcriptionUnit = new TranscriptionUnit(tnapNumber, deltaG_2p, genomeBg);
 
+            // TODO: Repressor is R, CAP is activator. cAMP should not be here at all. Fix it. Redo charts.
+            transcriptionUnit.addRegulator("CAP", 0.0f); // paper says nothing, assuming zero
+            transcriptionUnit.addRegulator("cAMP", deltaG_cp);
+
+            // tCal and the paper with the model use the word site for slightly different
+            // things. One binding site in the paper is composed of multiple tCal binding sites…
             // site1 : O3, C1
-            unit.addBindingSite(O3, "CAP", deltaG_1r);
-            unit.addBindingSite(C1, "cAMP", deltaG_1c);
-            unit.addForbiddenEvent(new TreeSet<Integer>(Arrays.asList(O3, C1)));
-
+            transcriptionUnit.addBindingSite(O3, "CAP", deltaG_1r);
+            transcriptionUnit.addBindingSite(C1, "cAMP", deltaG_1c);
+            transcriptionUnit.addForbiddenEvent(new TreeSet<Integer>(Arrays.asList(O3, C1)));
             // site2 : P1
             // unit.addBindingSite(P1, "", );
+
             // site3 : O1, C2
-            unit.addBindingSite(O1, "CAP", deltaG_3r);
-            unit.addBindingSite(C2, "cAMP", deltaG_3c);
-            unit.addForbiddenEvent(new TreeSet<Integer>(Arrays.asList(O1, C2)));
+            transcriptionUnit.addBindingSite(O1, "CAP", deltaG_3r);
+            transcriptionUnit.addBindingSite(C2, "cAMP", deltaG_3c);
+            transcriptionUnit.addForbiddenEvent(new TreeSet<Integer>(Arrays.asList(O1, C2)));
 
             // site4 : O2
-            unit.addBindingSite(O2, "CAP", deltaG_4r);
+            transcriptionUnit.addBindingSite(O2, "CAP", deltaG_4r);
 
             // interaction energies
-            // unit.addForbiddenEvent(new TreeSet(Arrays.asList(O1, O3, P1))); // RNAP is separate, not a regulator
+            // unit.addForbiddenEvent(new TreeSet(Arrays.asList(O1, O3, P1))); // in tCal RNAP is separate, not a regulator, so this does not work
             // we need to subtract the energy of binding the second of the repressors, because that is how they do it in the paper
-            unit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(O1, O3)), deltaG_13 - deltaG_3r, Float.POSITIVE_INFINITY); // TYPO: they say int energy for sites 1,2 // it also forbids the binding of RNAP
-
-            unit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(03, O2)), deltaG_4r - deltaG_14, 0.0f); // haven't found anything in the paper
-            unit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(01, O2)), deltaG_4r - deltaG_34, 0.0f); // guessing RNAP int energy to be 0.0
-
-            unit.setRegMolNumber("CAP", (int) Math.round((CAP * 1e-6) * (8.0e-16) * 6.022e23)); //for now try (moles/liter)*(volume of e-coli)*NA
-            unit.setRegMolNumber("cAMP", (int) Math.round((cAMP * 1e-6) * (8.0e-16) * 6.022e23));
-            return unit.bindingProb();
+            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(O1, O3)), deltaG_13 - deltaG_3r, Float.POSITIVE_INFINITY); // TYPO: they say int energy for sites 1,2 // it also forbids the binding of RNAP
+            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(03, O2)), deltaG_4r - deltaG_14, 0.0f); // haven't found anything in the paper
+            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(01, O2)), deltaG_4r - deltaG_34, 0.0f); // guessing RNAP int energy to be 0.0
+            return transcriptionUnit;
         }
 
         @Override
