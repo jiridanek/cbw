@@ -40,15 +40,17 @@ public class Knorre1968 {
         PrintWriter writer = null;
 
         // I have no idea where to get these, values are sortof random here
-        //DDESystem system = new DDESystem(0.03, 0.2, 0.1, 0.8);
+        //DDESystem system = new DDESystem(0.03, 0.2, 0.1, 0.8, 0.0, 0.0);
         // probably better set of values obtained by process in the article
         // run the previous, wait for steady state, divide by 1000
         DDESystem system = new DDESystem(1.54542715e-04 / 1000, 1.54542715e-04 / 1000,
-                3.66546278e-02 / 1000, 4.26454251e-02 / 1000);
+                3.66546278e-02 / 1000, 4.26454251e-02 / 1000, 0, 160);
         DDE23.IntegrationResult result = DDE23.integrate(system, system.delays, system.initial, 0, 256);
 
         System.out.println("possibly break here with debugger");
 
+        // logs the concentrations of proteins into a csv file
+        //      the first column is time, other columns are the concentrations
         {
             try {
                 writer = new PrintWriter("/tmp/Knorre1968.csv", "UTF-8");
@@ -69,6 +71,10 @@ public class Knorre1968 {
                 writer.close();
             }
         }
+
+        // logs the fractional occupancy to a csv file
+        //      the first column is time, the second one is fractional occupancy
+        // the rows are not ordered by time, it must be sorted before plotting
         {
             try {
                 writer = new PrintWriter("/tmp/Knorre1968fracoccup.csv", "UTF8");
@@ -260,7 +266,7 @@ public class Knorre1968 {
         public double[] delays;
         public double[] initial;
 
-        public DDESystem(double mb, double mp, double b, double p) {
+        public DDESystem(double mb, double mp, double b, double p, double ge, double le) {
             delays = new double[2];
             delays[idx_tau_B] = tau_B;
             delays[idx_tau_P] = tau_P;
@@ -271,6 +277,9 @@ public class Knorre1968 {
             initial[P] = p;
             initial[cAMP_T] = 0.0;
             initial[A_T] = 0.0;
+            
+            G_E = ge;
+            L_E = le;
 
             // conversion explained in initializeTranscriptionUnit at setRegMolNumber call
             int tnapNumber = (int) Math.round((mRNAP * 1e-6) * (8.0e-16) * 6.022e23);
@@ -323,12 +332,14 @@ public class Knorre1968 {
             int tnapNumber = (int) Math.round((mRNAP * 1e-6) * (8.0e-16) * 6.022e23);
             float genomeBg = (int) 5e9; // FIXME: play with this number and see what it does?
             unit = initializeTranscriptionUnit(tnapNumber, genomeBg);
+            // R is repressor, CAP is activator
             unit.setRegMolNumber("CAP", (int) Math.round((CAP * 1e-6) * (8.0e-16) * 6.022e23)); //for now try (moles/liter)*(volume of e-coli)*NA
-            unit.setRegMolNumber("cAMP", (int) Math.round((cAMP * 1e-6) * (8.0e-16) * 6.022e23));
+            unit.setRegMolNumber("R", (int) Math.round((R * 1e-6) * (8.0e-16) * 6.022e23));
             return unit.bindingProb();
         }
 
         private TranscriptionUnit initializeTranscriptionUnit(int tnapNumber, float genomeBg) {
+            // TODO: compare results with Table 2 in the article
             float deltaG_2p = -10.20f;
             float deltaG_cp = -1.59f;
             float deltaG_1c = -10.68f;
@@ -350,33 +361,33 @@ public class Knorre1968 {
 
             TranscriptionUnit transcriptionUnit = new TranscriptionUnit(tnapNumber, deltaG_2p, genomeBg);
 
-            // TODO: Repressor is R, CAP is activator. cAMP should not be here at all. Fix it. Redo charts.
-            transcriptionUnit.addRegulator("CAP", 0.0f); // paper says nothing, assuming zero
-            transcriptionUnit.addRegulator("cAMP", deltaG_cp);
+            transcriptionUnit.addRegulator("CAP", deltaG_cp);
+            transcriptionUnit.addRegulator("R", 0.0f); //FIXME: paper says nothing, assuming zero
 
             // tCal and the paper with the model use the word site for slightly different
             // things. One binding site in the paper is composed of multiple tCal binding sites…
             // site1 : O3, C1
-            transcriptionUnit.addBindingSite(O3, "CAP", deltaG_1r);
-            transcriptionUnit.addBindingSite(C1, "cAMP", deltaG_1c);
+            transcriptionUnit.addBindingSite(O3, "CAP", deltaG_1c);
+            transcriptionUnit.addBindingSite(C1, "R", deltaG_1r);
             transcriptionUnit.addForbiddenEvent(new TreeSet<Integer>(Arrays.asList(O3, C1)));
             // site2 : P1
             // unit.addBindingSite(P1, "", );
 
             // site3 : O1, C2
-            transcriptionUnit.addBindingSite(O1, "CAP", deltaG_3r);
-            transcriptionUnit.addBindingSite(C2, "cAMP", deltaG_3c);
+            transcriptionUnit.addBindingSite(O1, "CAP", deltaG_3c);
+            transcriptionUnit.addBindingSite(C2, "R", deltaG_3r);
             transcriptionUnit.addForbiddenEvent(new TreeSet<Integer>(Arrays.asList(O1, C2)));
 
             // site4 : O2
-            transcriptionUnit.addBindingSite(O2, "CAP", deltaG_4r);
+            //TYPO?: on page 1284 first paragraph they say that CAP binds here
+            transcriptionUnit.addBindingSite(O2, "R", deltaG_4r);
 
             // interaction energies
             // unit.addForbiddenEvent(new TreeSet(Arrays.asList(O1, O3, P1))); // in tCal RNAP is separate, not a regulator, so this does not work
             // we need to subtract the energy of binding the second of the repressors, because that is how they do it in the paper
-            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(O1, O3)), deltaG_13 - deltaG_3r, Float.POSITIVE_INFINITY); // TYPO: they say int energy for sites 1,2 // it also forbids the binding of RNAP
-            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(03, O2)), deltaG_4r - deltaG_14, 0.0f); // haven't found anything in the paper
-            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(01, O2)), deltaG_4r - deltaG_34, 0.0f); // guessing RNAP int energy to be 0.0
+            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(O1, O3)), deltaG_13 - deltaG_3r, Float.POSITIVE_INFINITY); // TYPO: they say interaction energy for sites 1,2 // it also forbids the binding of RNAP
+            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(03, O2)), deltaG_14 - deltaG_4r, 0.0f); // haven't found anything in the paper
+            transcriptionUnit.addInteractGroup(new TreeSet<Integer>(Arrays.asList(01, O2)), deltaG_34 - deltaG_4r, 0.0f); // guessing RNAP int energy to be 0.0
             return transcriptionUnit;
         }
 
