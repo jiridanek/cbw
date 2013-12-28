@@ -1,0 +1,30 @@
+<div class="starter-template">
+          <h1>Thermodynamic Model Tool</h1>
+          <p class="lead">
+            Use this model tool to as a way to quickly specify your transcription model.<br>
+            All you get is to go input your data to the forms accessible through the panel on the left.
+          </p>
+          </div>>
+
+Theory
+
+<p>What we mean by a thermodynamic model of gene expression is a mathematical model of dependency of protein concentrations in time expressed as a collection of ordinary delay differential equations that makes use of the ader-shan*** kinetic. The ader- kinetic makes it a thermodynamic model since it is justified by assuming that due to the time scale separation between the slow transcription and relatively fast binding of transcription factors the latter can be viewed as being in a quasi-steady state regarding the former and thermodynamic arguments are used to develop the. Since the result of the *** kinetic is called fractional occupancy, giving the fraction of promotors in a large ansamble of individual systems that are bound by RNAP, the thermodynamic model is often called a fractional occupancy model.
+</p>
+<p>The simulation of the model comprises the numeric integration of the DDEs. At each integration step, the fractional occupancy is reevaluated using the current protein concentrations.
+</p>
+<p>List of relevant references to literature is provided and the theory is reviewed in more detail in the report by the fall 2013 group.
+</p>
+
+<img src="#"> picture of the modules connections in CBW main window 
+
+Note
+
+As of December 2013, this module is also compatible with ***deterministic euler integrator*** provided that delay terms are not used. It might be possible to convert some DDEs to ODEs in a way described at http://www.copasi.org/tiki-view_forum_thread.php?forumId=1&comments_parentId=751&topics_offset=69&topics_sort_mode=replies_asc .
+
+First, begin with defining <code>Constants</code>, then list the chemical <code>Species</code> in
+                the model, in the next step you specify the chemical <code>Reactions</code> and finally you put in 
+                the <code>Rate Laws</code> that govern the reactions.</p>
+
+Naming
+
+There is a gap between how the names are displayed (with \(\TeX\) math formatting) and how they are represented internally. This can cause problems if the user is not aware of the implications. The internal representation for symbols is the string entered by the user with spaces stripped. Therefore, if two constants differ only in spaces they would be cosidered the same. Next, even if two constant names are rendered the same, they will be considered different constants if the syntax differs in anything more than spacing.

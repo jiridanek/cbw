@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+<!-- <script src="packages/shadow_dom/shadow_dom.debug.js"></script> -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!--     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png"> -->
+
+<!-- Bootstrap core CSS -->
+<link
+  href="assets/ThermodynamicModelUI/third_party/bootstrap-3.0.3/dist/css/bootstrap.css"
+  rel="stylesheet">
+
+<link
+  href="assets/ThermodynamicModelUI/third_party/bootstrap-3.0.3/dist/css/bootstrap-theme.css"
+  rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link rel="stylesheet" href="thermodynamicmodelui.css">
+
+<!-- Just for debugging purposes. Don't actually copy this line! -->
+<!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+
+
+<script type="text/javascript">
+    window.onerror = function(msg, url, line) {
+      alert("Error: " + msg + "\nurl: " + url + "\nline #: " + line);
+    };
+    
+    </script>
+</head>
+
+<body>
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle"
+          data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span> <span
+            class="icon-bar"></span> <span class="icon-bar"></span> <span
+            class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Thermodynamic Model Tool</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#help">Help</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+
+  <div thermodynamic-model-ul class="container">
+    <div id="test"></div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="bs-sidebar hidden-print" role="complementary">
+          <!-- change the name? -->
+          <!-- Constants -->
+          <div class="nav list-group">
+            <a ng-href="#constants" class="list-group-item active">
+              <h4 class="list-group-item-heading"
+                style="display: inline-block;">Constants</h4>
+              <div class="bs-sidebar fold-sidebutton">
+                <span class="caret caret-large"></span>
+              </div> <!--               <p class="list-group-item-text">Define constants for -->
+              <!--                 the rest of the model.</p> -->
+            </a>
+            <ul class="nav list-group">
+              <li class="nav list-group-item push-left"
+                ng-repeat="constant in ctrl.constants"
+                ng-click="ctrl.selectConstant(constant)"><span text
+                math="constant.name"></span> = {{constant.value}}
+                {{constant.description}}</li>
+              <li class="list-group-item push-left">Vestibulum at
+                eros</li>
+            </ul>
+            <!-- Species -->
+            <a ng-href="#species" class="list-group-item">
+              <h4 class="list-group-item-heading">
+                Species <span class="caret caret-large"></span>
+              </h4>
+            </a>
+            <ul class="list-group">
+              <li class="nav list-group-item push-left"
+                ng-repeat="s in ctrl.species"><span text
+                math="s.name"></span> <span text math="s.description"></span></li>
+              <li class="list-group-item push-left">Vestibulum at
+                eros</li>
+            </ul>
+            <!-- Reactions -->
+            <a href="#" class="list-group-item">
+              <h4 class="list-group-item-heading">
+                Reactions <span class="caret caret-large"></span>
+              </h4>
+            </a>
+            <!-- Rate Laws -->
+            <a href="#" class="list-group-item">
+              <h4 class="list-group-item-heading">
+                Rate Laws <span class="caret caret-large"></span>
+              </h4>
+              <p class="list-group-item-text">Prescribe how to
+                determine the reaction rates.</p>
+            </a>
+          </div>
+          <ul class="nav bs-sidenav">
+        </div>
+      </div>
+      <div class="col-md-8" role="main">
+        <!-- Global Bootstrap settings
+  ================================================== -->
+        <ng-view></ng-view>
+
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; CBW 2013</p>
+    </div>
+  </div>
+  <!-- /.container -->
+
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <!--   <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> -->
+  <!--   <script src="assets/ThermodynamicModelUI/third_party/bootstrap-3.0.3/dist/js/bootstrap.min.js"></script> -->
+  <!--   <script src="assets/ThermodynamicModelUI/third_party/MathJax-2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+  -->
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  'tex2jax': {
+    'inlineMath': [['\$','\$']], // math in between $$
+    'processEscapes': true
+    }
+  });
+</script>
+
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  <script src="packages/browser/interop.js"></script>
+  <script type="application/dart" src="thermodynamicmodelui.dart"></script>
+  <script src="packages/browser/dart.js"></script>
+
+</body>
+</html>

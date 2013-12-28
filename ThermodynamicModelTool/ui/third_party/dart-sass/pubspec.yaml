@@ -1,0 +1,11 @@
+name: sass
+version: 0.0.4
+description: >
+  Sass-transformer for pub-serve and pub-build.
+author: Juha Komulainen <juha.komulainen@evident.fi>
+homepage: https://bitbucket.org/evidentsolutions/dart-sass
+dependencies:
+  barback: any
+  utf: any
+dev_dependencies:
+  unittest: any

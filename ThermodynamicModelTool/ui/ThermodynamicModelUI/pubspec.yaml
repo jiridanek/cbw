@@ -1,0 +1,13 @@
+name: ThermodynamicModelUI
+description: A sample web application
+dependencies:
+  angular: any
+  browser: any
+  js: any
+  polymer: any
+  sass:
+    path: ../third_party/dart-sass
+  shadow_dom: any
+transformers:
+- sass:
+    entry_points: web/thermodynamicmodelui.html

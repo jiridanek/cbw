@@ -1,0 +1,20 @@
+    <p id="text">view constants</p>
+    <table class="data-table bordered">
+      <thead>
+        <tr>
+            <th>#</th>        
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+      </thead>
+      <tr ng-repeat="constant in ctrl.constants">
+        <td>{{$index + 1}}</td>
+        <td>
+          <div text math="constant.name"></div>
+          </td>
+        <td>{{constant.value}}</td>
+        <td>{{constant.description}}</td>
+      </tr>
+    </table>
+<!--     http://www.red-team-design.com/wp-content/uploads/2011/10/practical-css3-tables-with-rounded-corners-demo.html -->
