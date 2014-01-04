@@ -2,6 +2,28 @@ library thermodynamic_model_ui_controller;
 import 'dart:core';
 import 'package:angular/angular.dart' as ng;
 
+class Reaction {
+  // TODO: _id
+
+  Reaction(String s) {
+
+  }
+}
+
+class Parameter {
+  static int nextId = 0; // TODO: factor this out
+  static int getId() {
+    return nextId++;
+  }
+
+  int _id;
+  String _name;
+  String _unit;
+  String _description;
+
+  Parameter(this._name, this._unit, this._description);
+}
+
 class Constant {
   static int nextId = 0;
   static int getId() {
@@ -75,6 +97,9 @@ Thermodynamic model is now unavailable!""";
   List _ratelaws = [];
   get ratelaws => _ratelaws;
 
+  List _parameters = [];
+  get parameters => _parameters;
+
   Constant selectedConstant;
 
   void selectConstant(Constant constant) {
@@ -82,6 +107,37 @@ Thermodynamic model is now unavailable!""";
   }
 
   ThermodynamicModelUIController() {
+    _reactions = [
+      // yPrime[M_B] = psi_tau_B - (mu + xi_M) * vars[M_B];
+      new Reaction(" -> M_B"),
+      new Reaction("M_B -> "), // mu
+      new Reaction("M_B -> "), // xi_M
+      //yPrime[M_P] = psi_tau_P - (mu + xi_M) * vars[M_P];
+      new Reaction(" -> M_P"),
+      new Reaction("M_P -> "), // mu
+      new Reaction("M_P -> "), // xi_M
+      //yPrime[B] = 1.0 / 4 * k_B * vars[M_B] * T_B - (mu + xi_B) * vars[B];
+      new Reaction(" -> B"),
+      new Reaction("B -> "),
+      new Reaction("B -> "),
+      //yPrime[P] = k_P * vars[M_P] * T_P - (mu + xi_P) * vars[P];
+      new Reaction(""),
+      //yPrime[cAMP_T] = v_cAMP - xi_cAMP * cAMP - mu * vars[cAMP_T];
+      new Reaction(""),
+      //yPrime[A_T] = (vL1 - vL2) / 2 - (xi_A + mu) * vars[A_T];
+      new Reaction(""),
+    ];
+    _parameters = [
+      new Parameter("M_B", "", "Initial concentration of "),
+      new Parameter("M_P", "", "Initial concentration of "),
+      new Parameter("B", "", "Initial concentration of \$\\beta\$gallactose"),
+      new Parameter("P", "", "Initial concentration of "),
+      //new Parameter("", "", ""),
+      new Parameter("A\$_T\$", "", "Initial total concentration of allolactose"),
+      new Parameter("cAMP", "", "Initial concentration of cAMP"),
+      new Parameter("\$G_E\$", "", "Extracellular glucose concentration"),
+      new Parameter("\$L_E\$", "", "Lactose concentration in the external medium")
+    ];
     _species = [
       new Species("\$\\rm{M_B}\$", "\$\\beta\$-galactosidase mRNA"),
       new Species("\$\\rm{M_P}\$", "Lac permease mRNA"),
@@ -98,37 +154,29 @@ Thermodynamic model is now unavailable!""";
       new Constant("\$[\\rm{R_T}]\$", "2.9e-2", "\$\\mu M\$", "Total repressor concentration"),
       new Constant("\$k_m\$", "0.18", "min\$^-1\$", "Transcription initiation rate"),
       new Constant("\$\\xi_M\$", "0.46", "min\$^-1\$", "mRNA degradation rate"),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
-//      new Constant("", "", "", ""),
+      new Constant("\$K_{\\rm CAP}\$", "3.0", "\$\\mu M\$", "Equilibrium dissociation constant between CRP and cAMP"),
+      new Constant("\$\\tau_B\$", "5.1e-3", "min", "Time delay between transcription initiation and appearance of a lacZ ribosome binding site"),
+      new Constant("\$\\tau_P\$", "0.1", "min", "Time delay between transcription initiation and appearance of a lacY ribosome binding site"),
+      new Constant("\$\\xi_P\$", "0.01", "min\$^{-1}\$", "lac permease degradation rate"),
+      new Constant("\$k_P\$", "18.8", "min\$^{-1}\$", "lacY mRNA translation initiation rate"),
+
+      //new Constant("", "", "", ""),
+      //new Constant("", "", "", ""),
+      //new Constant("", "", "", ""),
+      //new Constant("", "", "", ""),
+      //new Constant("", "", "", ""),
+
+      new Constant("\$\\phi_{L_1}\$", "1.08e3", "min\$^-1\$", "Lactose hydrolisis rate"),
+      new Constant("\$\\Phi_{L_1}\$", "5.0e-2", "\$\\mu M\$", "Lactose saturation constant"),
+      new Constant("\$\\Phi_{G_2}\$", "2.71e2", "\$\\mu M\$", "Lactose transport constant for inhibition by glucose"),
+      new Constant("\$\\xi_P\$", "0.0", "min\$^{-1}\$", "Allolactose degradation rate constant"),
+      new Constant("\$\\phi_{cAMP}\$", "5.5", "\$\\mu M\$min\$^-1\$", "cAMP synthesis rate constant"),
+      new Constant("\$\\Phi_{cAMP}\$", "40.0", "\$\\mu M\$", "cAMP synthesis saturation constant"),
+      new Constant("\$\\xi_{cAMP}\$", "2.1", "min\$^{-1}\$", "cAMP excretion and degradation rate"),
+      new Constant("\$K_A\$", "1.0", "\$\\mu M\$", "Repressor-allolactose dissociation constant"),
     ];
 
     //TODO: rewrite all this to the form above
-
-    //$K_{\rm CAP}$ 3.0 $\mu M$ Equilibrium dissociation constant between CRP and cAMP
-
-    //$\tau_B$ 5.1e-3 min Time delay between transcription initiation and appearance of a lacZ ribosome binding site
-
-    //$\tau_P$ 0.1 min Time delay between transcription initiation and appearance of a lacY ribosome binding site
-
-
-    //$\xi_P$ 0.01 min$^{-1}$ lac permease degradation rate
-
-    //$k_P$ 18.8 min$^{-1}$ lacY mRNA translation initiation rate
-
-    //$\xi_{cAMP}$ 2.1 min$^{-1}$ cAMP excretion and degradation rate
-
-
 //    /**
 //     * β-galactosidase degradation rate
 //     */
@@ -208,31 +256,12 @@ Thermodynamic model is now unavailable!""";
 //     */
 //    double k_m = 0.18;
 //
-//    // indices of variables in DDE
-//    int M_B = 0; // TODO: use enum?
-//    int M_P = 1;
-//    int B = 2;
-//    int P = 3;
-//    int cAMP_T = 4;
-//    int A_T = 5;
-//
-//    int idx_tau_B = 0;
-//    int idx_tau_P = 1;
-//
 //    double mRNAP = 3.0; // uM
 //
 //    // we have a big bottle, therefore these concentrations
 //    // practically do not change
 //
-//    /**
-//     * extracellular glucose concentration
-//     */
-//    double G_E;
-//
-//    /**
-//     * lactose concentration in the external medium
-//     */
-//    double L_E;
+
 //  }
 
 //  Map<String, Recipe> _recipeMap = {};
