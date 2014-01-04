@@ -4,10 +4,13 @@ dependencies:
   angular: any
   browser: any
   js: any
+  petitparser: any
   polymer: any
   sass:
     path: ../third_party/dart-sass
   shadow_dom: any
+dev_dependencies:
+  unittest: any
 transformers:
 - sass:
     entry_points: web/thermodynamicmodelui.html
