@@ -20,12 +20,13 @@
  *     Biserka Cvetkovska
  *     Ivana Kostadinovska
  */
-
 package fri.cbw.ThermodynamicSimulationEngine;
+
 import fri.cbw.CBWutil.InboundConnectionException;
 import fri.cbw.GenericTool.AbstractEngineTool;
 import fri.cbw.GenericTool.AbstractGenericTool;
 import fri.cbw.GenericTool.AbstractModelTool;
+import fri.cbw.GenericTool.AbstractSpecies;
 import fri.cbw.GenericTool.ToolTopComponent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,15 +36,20 @@ import org.openide.util.lookup.ServiceProvider;
 import fri.cbw.ThermodynamicModelTool.ThermodynamicModelTool;
 import fri.cbw.ThermodynamicModelTool.ThermodynamicModelToolTopComponent;
 import fri.cbw.ThermodynamicSimulationEngine.Knorre1968;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 
@@ -51,54 +57,89 @@ import org.openide.NotifyDescriptor;
  *
  */
 @ServiceProvider(service = AbstractEngineTool.class)
-public class ThermodynamicSimulationEngine extends AbstractEngineTool{
+public class ThermodynamicSimulationEngine extends AbstractEngineTool {
 
     @Override
     public void calculate() {
+        calculateData();
+    }
+
+    public void calculateData() {
+        NumberAxis xAxis = new NumberAxis();
+        xAxis.setLabel("Time");
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Fractional occupancy");
+
+        XYChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+        lineChart.setTitle("Thermodynamic engine data");
+
         try {
-        AbstractGenericTool prev;
-        ThermodynamicModelTool tmt;
-        ThermodynamicModelToolTopComponent tmttc;
-        
-        try {
-            prev = this.getFirstInboundModul();
-            ToolTopComponent tc = prev.getTc();
-            if (tc instanceof ThermodynamicModelToolTopComponent) {
-                tmttc = (ThermodynamicModelToolTopComponent) tc;
+            AbstractGenericTool prev;
+            ThermodynamicModelTool tmt;
+
+            try {
+                prev = this.getFirstInboundModul();
+                ToolTopComponent tc = prev.getTc();
+                PrintWriter writer = null;
+
+                if (tc instanceof ThermodynamicModelToolTopComponent) {
+
+                    ThermodynamicModelToolTopComponent tmttc = (ThermodynamicModelToolTopComponent) tc;
+
+                    double mb = tmttc.getlacYConcentration();
+                    double mp = tmttc.getlacZConcentration();
+                    double p = tmttc.getlacZProductConcentration();
+                    double b = tmttc.getlacYProductConcentration();
+                    double le = tmttc.getLeConcentration();
+                    double ge = tmttc.getGeConcentration();
+
+                    DDESystem system = new DDESystem(mb / 1000, mp / 1000, b / 1000, p / 1000, ge, le);
+                    DDE23.IntegrationResult result = DDE23.integrate(system, system.delays, system.initial, 0, 256);
+
+                    /*DDESystem system = new DDESystem(1.54542715e-04 / 1000, 1.54542715e-04 / 1000,
+                     3.66546278e-02 / 1000, 4.26454251e-02 / 1000, 0, 160);
+                     DDE23.IntegrationResult result = DDE23.integrate(system, system.delays, system.initial, 0, 256);
+                     */
+                    
+                    //prepare the graph
+                    XYChart.Series series = new XYChart.Series();
+                    for (int i = 0; i <= 20; i++) {
+                        series.getData().add(new XYChart.Data(i, system.fractionaloccupancytime.get(i)));
+                    }
+
+                    lineChart.getData().add(series);
+                    setLineChartData(lineChart);
+
+                    //write the fractional occupancy in time in a csv file
+                    writer = new PrintWriter("C:/Users/Biserka/Desktop/CSV/Knorre1968fracoccup2.csv", "UTF8");
+                    for (int i = 0; i < system.fractionaloccupancyvalue.size(); i++) {
+                        writer.print(system.fractionaloccupancytime.get(i));
+                        writer.print(",");
+                        writer.print(system.fractionaloccupancyvalue.get(i));
+                        writer.println();
+                    }
                 } else {
-                // FIXME: this happens if the ThermodynamicModelToolTopComponent window is not currently open
-                DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Previous module to ThermodynamicSimulationEngine must be a ThermodynamicModelTool"));
-                return;
-            }
-        }catch(InboundConnectionException e){
-               Logger.getLogger(ThermodynamicSimulationEngine.class.getName()).log(Level.SEVERE, null, e);
+                    // FIXME: this happens if the ThermodynamicModelToolTopComponent window is not currently open
+                    DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("Previous module to ThermodynamicSimulationEngine must be a ThermodynamicModelTool"));
+                    return;
+                }
+            } catch (InboundConnectionException e) {
+                Logger.getLogger(ThermodynamicSimulationEngine.class.getName()).log(Level.SEVERE, null, e);
                 DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("ThermodynamicSimulationEngine must have a ThermodynamicModelTool as predecessor"));
                 return;
             }
-                int mb = tmttc.getlacYConcentration();
-                int mp = tmttc.getlacZConcentration();
-                int p = tmttc.getlacZProductConcentration();
-                int b = tmttc.getlacYProductConcentration();
-                int le = tmttc.getLeConcentration();
-                int ge = tmttc.getGeConcentration();
 
-                //DDESystem system = new DDESystem(1.54542715e-04 / 1000, 1.54542715e-04 / 1000,
-                //3.66546278e-02 / 1000, 4.26454251e-02 / 1000, 0, 160);
-        DDESystem system = new DDESystem(mb, mp, b, p, ge, le);        
-        
-        DDE23.IntegrationResult result = DDE23.integrate(system, system.delays, system.initial, 0, 256);
-        
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             Writer result = new StringWriter();
             PrintWriter printWriter = new PrintWriter(result);
             e.printStackTrace(printWriter);
             DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(
-                result.toString()
+                    result.toString()
             ));
             e.printStackTrace(System.out);
         }
     }
-    
+
     @Override
     public String getName() {
         return "Thermodynamic Simulation Engine";
@@ -113,8 +154,8 @@ public class ThermodynamicSimulationEngine extends AbstractEngineTool{
     public Class<Object> getTopComponentClass() {
         calculate();
         throw new UnsupportedOperationException("Not supported yet.");
-    }  
-    
+    }
+
     public class DDESystem implements DDE23.FirstOrderDelayDifferentialEquations {
 
         // log the computed fractional occupancy values for debugging
@@ -272,7 +313,6 @@ public class ThermodynamicSimulationEngine extends AbstractEngineTool{
 
         // we have a big bottle, therefore these concentrations
         // practically do not change
-
         /**
          * extracellular glucose concentration
          */
@@ -298,7 +338,7 @@ public class ThermodynamicSimulationEngine extends AbstractEngineTool{
             initial[P] = p;
             initial[cAMP_T] = 0.0;
             initial[A_T] = 0.0;
-            
+
             G_E = ge;
             L_E = le;
 

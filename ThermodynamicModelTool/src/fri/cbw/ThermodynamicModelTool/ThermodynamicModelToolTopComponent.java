@@ -184,39 +184,39 @@ public final class ThermodynamicModelToolTopComponent extends ToolTopComponent {
     // End of variables declaration//GEN-END:variables
     
     //Ge
-    public int getGeConcentration()
+    public double getGeConcentration()
     {
-        return Integer.parseInt(GeConcentration.getText());
+        return Double.valueOf(GeConcentration.getText());
     }
     
     //Le
-    public int getLeConcentration()
+    public double getLeConcentration()
     {
-        return Integer.parseInt(LeConcentration.getText());
+        return Double.valueOf(LeConcentration.getText());
     }
     
     //mb
-    public int getlacYConcentration()
+    public double getlacYConcentration()
     {
-        return Integer.parseInt(lacYConcentration.getText());
+        return Double.valueOf(lacYConcentration.getText());
     }
     
     //mp
-    public int getlacZConcentration()
+    public double getlacZConcentration()
     {
-        return Integer.parseInt(lacZConcentration.getText());
+        return Double.valueOf(lacZConcentration.getText());
     }
     
     //P
-    public int getlacZProductConcentration()
+    public double getlacZProductConcentration()
     {
-        return Integer.parseInt(lacZProductConcentration.getText());
+        return Double.valueOf(lacZProductConcentration.getText());
     }
     
     //B
-    public int getlacYProductConcentration()
+    public double getlacYProductConcentration()
     {
-        return Integer.parseInt(lacYProductConcentration.getText());
+        return Double.valueOf(lacYProductConcentration.getText());
     }
     
     @Override
