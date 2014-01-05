@@ -1,30 +1,136 @@
 <div class="starter-template">
-          <h1>Thermodynamic Model Tool</h1>
-          <p class="lead">
-            Use this model tool to as a way to quickly specify your transcription model.<br>
-            All you get is to go input your data to the forms accessible through the panel on the left.
-          </p>
-          </div>>
+  <h1>Thermodynamic Model Tool User Documentation</h1>
+  <p class="lead">
+    Use this model tool to as a way to quickly specify your
+    thermodynamic transcription model.<br> All you need to do is to
+    input your data to the forms accessible through the panel on the
+    left.
+  </p>
+</div>
 
-Theory
+<div class="page-header">
+  <h1>Theory</h1>
+</div>
 
-<p>What we mean by a thermodynamic model of gene expression is a mathematical model of dependency of protein concentrations in time expressed as a collection of ordinary delay differential equations that makes use of the ader-shan*** kinetic. The ader- kinetic makes it a thermodynamic model since it is justified by assuming that due to the time scale separation between the slow transcription and relatively fast binding of transcription factors the latter can be viewed as being in a quasi-steady state regarding the former and thermodynamic arguments are used to develop the. Since the result of the *** kinetic is called fractional occupancy, giving the fraction of promotors in a large ansamble of individual systems that are bound by RNAP, the thermodynamic model is often called a fractional occupancy model.
+<p>What we mean by a thermodynamic model of gene expression is a
+  mathematical model of dependency of protein concentrations in time
+  expressed as a collection of ordinary delay differential equations
+  that makes use of the Shea-Ackers kinetic to model gene transcription.</p>
+
+<p>The Shea-Ackers kinetic is what makes it a thermodynamic model
+  since it is justified by assuming that due to the time scale
+  separation between the slow transcription and relatively fast binding
+  of transcription factors the latter can be viewed as being in a
+  quasi-steady state regarding the former. Therefore using thermodynamic
+  arguments in deriving a mathematical model to describe the
+  transcription rate is valid.</p>
+
+<p>One of the intermediary results of the Shea-Ackers kinetic is
+  called fractional occupancy, giving the fraction of promotors in a
+  large ansamble of individual systems that are bound by RNAP. This is
+  the factor that detemines the transcription rate. For this reason the
+  thermodynamic model is often called a fractional occupancy model.</p>
+
+<p>The simulation of the model comprises the numeric integration of
+  the system of DDEs. At each integration step, the fractional occupancy
+  is reevaluated using the current protein concentrations.</p>
+
+<p>List of relevant references to literature is provided and the
+  theory is reviewed in more detail in the report by the Autumn 2013
+  group.</p>
+
+<div class="page-header">
+  <h1>Thermodynamic Model Tool</h1>
+</div>
+
+<p>We choose to represent a thermodynamic model as a set of
+  Constants, Parameters, Species, Reactions and Rate Laws. To specify
+  a model, visit each of the sections in the left menu in turn and add
+  these components.</p>
+<p>The initial concentration of Species is specified through the
+  Param Eval Tool.</p>
+<p>The difference between Constants and Parameters is that values
+  of constants are specified here while parameter values are specified
+  through a Param Eval Tool. Conceptually, constants are given and do
+  not change during the experiment, while the values of parameters
+  depend on the experimental setup.</p>
+
+<div class="page-header">
+  <h1>Computational Biology Workspace (CBW)</h1>
+</div>
+
+<p class="note">This section is based on the CWB documantation in
+  Slovenian language.</p>
+
+<p>The Computational Biology Workspace is built upon the NetBeans
+  Platform. For the best compatibility it is necessary to have installed
+  version 7.4. The application is written to operate on Microsoft
+  Windows and has compatibility problems on other platforms (with JavaFX
+  libraries, which are located in the ./Release/modules/bin).</p>
+
+<h3>Installation</h3>
+<p>Download In NetBeans select File->Open select the folder where
+  you downloaded CBW (it will have a puzzle icon), check the Open
+  required projects checkmark and confirm the dialog by clicking OK.
+  Click the Run button (Green arrow) on the top toolbar</p>
+
+<h3>Using the application</h3>
+
+<p>
+  The basic two applications are the <i>Palette</i>i> which contains the
+  available <i>tools</i> and <i>Core window</i> where the available
+  widgets are placed by dragging them from the Pallete using a mouse and
+  interconnected. Tools in the Core window are treated as nodes which
+  are interconnected by oriented edges. The orientation of the edges
+  indicates the flow of data. Tools can be connected to each other by
+  holding
+  <code>Ctrl</code>
+  key and clicking the left mouse button.
 </p>
-<p>The simulation of the model comprises the numeric integration of the DDEs. At each integration step, the fractional occupancy is reevaluated using the current protein concentrations.
+
+<p>Although the application allows interconecting all tools with any
+  other, you have to be careful, because tools are compatible only with
+  some predecessors. In general a a PlotTool tool gets data from the
+  EngineTool, which gets data from a ParamEvalTool which gets data from
+  a ModelTool.</p>
+
+<p>Right clicking on the node displays the popup menu that we offer
+  to delete the node or display a window with additional configuration.</p>
+
+<p>The four CBW tools that are used for specifying and evaluating
+  the thermodynamic model are</p>
+<ul>
+  <li>ThermodynamicModelTool</li>
+  <li>ThermodynamicParamEvalTool</li>
+  <li>ThermodynamicSimulationEngine</li>
+  <li>plot</li>
+</ul>
+
+<p>These tools need to be connected as it is shown in the following
+  picture.</p>
+<figure>
+  <img src="#" alt="">
+  <figcaption>Picture of the modules connections in CBW
+    main window</figcaption>
+</figure>
+
+<div class="page-header">
+  <h1>Notes</h1>
+</div>
+
+<p>
+  As of December 2013, this module is also compatible with
+  ***deterministic euler integrator*** provided that delay terms are not
+  used. It might be possible to convert some DDEs to ODEs <a
+    href="http://www.copasi.org/tiki-view_forum_thread.php?forumId=1&amp;comments_parentId=751&amp;topics_offset=69&amp;topics_sort_mode=replies_asc
+">in
+    a way described</a> at the Copasi website.
 </p>
-<p>List of relevant references to literature is provided and the theory is reviewed in more detail in the report by the fall 2013 group.
-</p>
 
-<img src="#"> picture of the modules connections in CBW main window 
-
-Note
-
-As of December 2013, this module is also compatible with ***deterministic euler integrator*** provided that delay terms are not used. It might be possible to convert some DDEs to ODEs in a way described at http://www.copasi.org/tiki-view_forum_thread.php?forumId=1&comments_parentId=751&topics_offset=69&topics_sort_mode=replies_asc .
-
-First, begin with defining <code>Constants</code>, then list the chemical <code>Species</code> in
-                the model, in the next step you specify the chemical <code>Reactions</code> and finally you put in 
-                the <code>Rate Laws</code> that govern the reactions.</p>
-
-Naming
-
-There is a gap between how the names are displayed (with \(\TeX\) math formatting) and how they are represented internally. This can cause problems if the user is not aware of the implications. The internal representation for symbols is the string entered by the user with spaces stripped. Therefore, if two constants differ only in spaces they would be cosidered the same. Next, even if two constant names are rendered the same, they will be considered different constants if the syntax differs in anything more than spacing.
+<p>There is a gap between how the names are displayed (with \(\TeX\)
+  math formatting) and how they are represented internally. This can
+  cause problems if the user is not aware of the implications. The
+  internal representation for symbols is the string entered by the user.
+  Therefore, even if two constant names are rendered the same, they will
+  be considered different constants if the syntax used to specify them
+  differs.</p>

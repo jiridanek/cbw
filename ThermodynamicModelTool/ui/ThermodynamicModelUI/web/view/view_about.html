@@ -1,22 +1,402 @@
+<div class="jumbotron">
+  <h1>About</h1>
+  <p class="lead">Support for Thermodynamic models is being worked on since Autumn 2012 term
+  as an group project assignment in the course of unconventional computing at the University of Ljubljana.</p>
+</div>
 
-Support for Thermodynamic models is being worked on since fall 2012 term as an group assignment in the course Unconventional computing at the University of Ljubljana.
+<div class="page-header">
+  <h1>Contributors</h1>
+</div>
 
-Contributors
+<ul>
+<li>Autumn 2012<
+  <ul>
+    <li>Aleksander Bešir</li>
+    <li>David Petrunov</li>
+  </ul>
+</li>
+<li>Autumn 2013
+  <ul>
+    <li>Biserka Cvetkovska</li>
+    <li>Ivana Kostadinovska</li>
+    <li>Jirka Daněk</li>
+  </ul>
+</li>
+</ul>
 
-fall 2012
+<div class="page-header">
+  <h1>Notable technologies</h1>
+</div>
 
-fall 2013
+<ul>
+<li>Java <ul>
+  <li>Swing</li>
+  <li>JavaFX</li>
+  <li>NetBeans Platform</li>
+</ul></li>
+<li>HTML5 <ul>
+  <li>SCSS</li>
+  <li>Twitter Bootstrap</li>
+  <li>MathJax</li>
+  <li>Dart <ul>
+    <li>AngularDart</li>
+    <li>PetitParser</li>
+  </ul></li>
+</ul></li>
+<li>SBML</li>
+</ul>
 
-Jirka Daněk
+<div class="page-header">
+  <h1>Notable references</h1>
+</div>
 
-Technology
-Java
-Swing
-JavaFX
-NetBeans
-ten parser, parsery?
-Twitter Bootstrap
-Dart
-Polymer.dart
-Angular.dart
-SCSS
+
+### Literature for all groups ###
+
+@article{ay2011mathematical,
+  title={Mathematical modeling of gene expression: a guide for the perplexed biologist},
+  author={Ay, Ahmet and Arnosti, David N},
+  journal={Critical reviews in biochemistry and molecular biology},
+  volume={46},
+  number={2},
+  pages={137--151},
+  year={2011},
+  publisher={Informa Healthcare New York}
+}
+
+one of those two editions
+
+@book{sauro2012enzyme,
+  title={Enzyme Kinetics for Systems Biology},
+  author={Sauro, H.M.},
+  isbn={9780982477311},
+  url={http://books.google.si/books?id=wiWPiHeuWuwC},
+  year={2012},
+  publisher={Ambrosius Publishing}
+}
+
+
+the Python software
+http://bioinformatics.cau.edu.cn/tCal/
+
+### Related readings from the course web page
+
+### Modeling in general ###
+
+Miha Moškon
+MODELI IN METRIKE DINAMIKE PREKLOPA
+V ENOSTAVNIH BIOLOŠKIH SISTEMIH
+ZA POTREBE RAČUNALNIŠKIH STRUKTUR
+PRIHODNOSTI
+Doktorska disertacija
+Mentor: izr. prof. dr. Miha Mraz
+
+
+Watch out for Toxo! The Secret Guide to Practical Science
+Jaroslav Flegr
+Translated by: Katherine Nehyba
+Copyrights: Jaroslav Flegr, 2012
+Box 27 Why to model in science, and what can and can’t be modeled
+http://www.frozenevolution.com/v-casual-contemplations-about-scientific-luck-mistakes-and-experiment-i-am-truly-embarrassed
+
+
+### Molecular biology ###
+
+An Introduction to Genetic Analysis. 7th edition.
+Transcription: an overview of gene regulation in eukaryotes
+http://www.ncbi.nlm.nih.gov/books/NBK21780/
+
+
+### Systems biology ###
+@book{alon2006introduction,
+  title={An Introduction to Systems Biology: Design Principles of Biological Circuits},
+  author={Alon, U.},
+  isbn={9781584886426},
+  lccn={2005056902},
+  series={Chapman \& Hall/CRC Mathematical \& Computational Biology},
+  url={http://books.google.si/books?id=pAUdPQlCZ54C},
+  year={2006},
+  publisher={Taylor \& Francis}
+}
+
+Lac operon: pp. 16; 194 - 196; 204; 223-227; 241
+
+p16: talks about transcription regulated by multiple factors, logic functions (same thing in Sauro), references Appendix B, Figure 2.5: 3D plot of the regulatory function (of [IPTG] and [cAMP]) of lac operon!
+
+in experiments people often do not use lactose but similar chemicals TMG or IPTG since they cause the induction like lactose but the cell is unable to metabolise it and therefore it not affect growth rate, (the julius2008stochastic below says the same thing)
+
+p194-: 
+LacZ: "When fully induced, E-coli makes about 60,000 copies of the LacZ protein per cell. Why not 50,000 or 70,000?"
+growth rate: is not a constant, but depends on the level of LacZ (and the outside levels of lactose) up to 17 %
+
+p204: nothing much
+
+p223: same here
+
+Appendix A, p241: it describes the transcription regulation model just using ODEs, in footnote says that this theory was first developed for lac
+
+Todo draw the circles and arrows +/- scheme (Pelanek)
+
+Lac operon is a set of genes regulated by the same promotor and resulting in a single transcript
+
+genes are labeled by italics small first letter, gene products in roman and with a capital first letter, mRNA is small first letter roman
+
+structure:
+lacZ, lac, ...
+
+repressors: lacI,
+inducers: lactose? ...
+
+Appendix B: pretty much what Sauro has. References Buchler 2003 about more complicated input functions in case TFs interact together (which is our case!)
+
+### lac operon ###
+
+http://www.ncbi.nlm.nih.gov/books/NBK21683/
+Molecular Cell Biology. 4th edition.
+Section 10.1Bacterial Gene Control: The Jacob-Monod Model
+
+@article{santillan2004influence,
+  title={Influence of Catabolite Repression and Inducer Exclusion on the Bistable Behavior of the \textit{lac} Operon},
+  author={Santill{\'a}n, Mois{\'e}s and Mackey, Michael C},
+  journal={Biophysical journal},
+  volume={86},
+  number={3},
+  pages={1282--1292},
+  year={2004},
+  publisher={Elsevier}
+}
+
+the model we are recreating
+
+http://www.nature.com/scitable/topicpage/operons-and-prokaryotic-gene-regulation-992
+
+introduction of the lac operon, it is more citable than wikipedia
+
+@article{roderick2005lac,
+  title={The< i> lac</i> operon galactoside acetyltransferase},
+  author={Roderick, Steven L},
+  journal={Comptes Rendus Biologies},
+  volume={328},
+  number={6},
+  pages={568--575},
+  year={2005},
+  publisher={Elsevier}
+}
+
+the LacA does not influence the lac mechanism and the models tend to ignore it.
+
+http://www.nature.com/scitable/topicpage/Negative-Transcription-Regulation-in-Prokaryotes-1013
+
+the operon is always being expressed, even when under full inhibition, therefore, all the components of the system (most importantly LacZ and LacY) are always present albait in a very small concentrations.
+
+presence of allolactose deactivates the inhibiting protein LacI
+
+"Experiments by F. Jacob and J. Monod provided much of our foundational knowledge of the mechanisms of lactose metabolism in bacteria. Working with a panel of mutants that had defects in different components of the lac operon (Table 1), these researchers were able to determine how the system functioned (Jacob & Monod, 1961)."
+
+1965 nobel prize in Physiology and medicine
+
+http://www.nature.com/scitable/topicpage/positive-transcription-control-the-glucose-effect-1009
+
+explains that catabolism of glucose inhibits cAMP production
+
+and that cAMP-CAP complex is a TF in lac transcription
+
+
+
+
+
+@article{gorke2008carbon,
+  title={Carbon catabolite repression in bacteria: many ways to make the most out of nutrients},
+  author={G{\"o}rke, Boris and St{\"u}lke, J{\"o}rg},
+  journal={Nature Reviews Microbiology},
+  volume={6},
+  number={8},
+  pages={613--624},
+  year={2008},
+  publisher={Nature Publishing Group}
+}
+
+explains in detail the glucose lactose exclusion.
+
+Also says that cAMP and CAP are just two names for one and the same thing! Wikipedia says that CRP is yet another name, "cAMP receptor protein (CRP; also known as catabolite activator protein, CAP)"; no, CRP and CAP is the same thing, cAMP is something different
+
+Also says that the cAMP-CRP complex is necessary for expression of lac!
+
+BOX 2 lists several points about the lac in which the biology textbooks tend to be outdated
+
+@article{mahaffy1999stability,
+  title={Stability analysis for a mathematical model of the lac operon},
+  author={Mahaffy, Joseph M and Savev, Emil Simeonov},
+  journal={Quarterly of Applied Mathematics},
+  volume={57},
+  number={1},
+  pages={37--53},
+  year={1999},
+  publisher={American Mathematical Society}
+}
+
+this gives a review of the mathematical model. Lac operon is a clasical example of positive feedback or induction of a bacterial gene. The biological process was described in late 1950's, then it lists 6 early models. All of them consist of a single nonlinear term that governs the production of mRNA and a number of additional differential equations. 
+
+The two jews from Appendix A: use of equilibrium kinetic is justified since we are dealing with small number of molecules but there is a large number of cells over which we are averaging (Hill)
+
+@article{julius2008stochastic,
+  title={Stochastic Modeling and Control of Biological Systems: The Lactose Regulation System of Escherichia Coli},
+  author={JULIUS, A Agung and HALASZ, Adam and SAKAR, M Selman and RUBIN, Harvey and KUMAR, Vijay and PAPPAS, George J},
+  journal={IEEE transactions on automatic control},
+  pages={51--65},
+  year={2008},
+  publisher={Institute of Electrical and Electronics Engineers}
+}
+
+repeats the argument for use of stochastic modeling over ODEs since there is a small number of molecules. but jews justify it.
+
+explains that the individual cells behave in a bistable way while only the bulk of bacteria exhibits the continuous behavior described by ODE, they cite two experiments that looked at individual cells to determine this
+ \beta galactosidase level in individual cells is either low or high "all-or-none" 
+
+
+### Statistical thermodynamic ###
+
+@book{atkins2006physical,
+  title={Physical Chemistry},
+  author={Atkins, P.W. and Walters, V. and De Paula, J.},
+  isbn={9780716774334},
+  url={http://books.google.si/books?id=cWk6PQAACAAJ},
+  year={2006},
+  publisher={Macmillan Higher Education}
+}
+
+### Thermodynamic simulation ###
+
+@article{garcia2011thermodynamics,
+  title={Thermodynamics of biological processes},
+  author={Garcia, Hernan G and Kondev, Jane and Orme, Nigel and Theriot, Julie A and Phillips, Rob},
+  journal={Methods in Enzymology},
+  volume={492},
+  pages={27},
+  year={2011},
+  publisher={NIH Public Access}
+}
+
+gives an overview of the use of thermodynamics ideas in modeling biological processes, it talks about Thermodynamic models in section 3.2
+
+
+tCal
+
+sauro
+
+@article{gedeon2008activators,
+  title={When activators repress and repressors activate: A qualitative analysis of the shea--ackers model},
+  author={Gedeon, Tom{\'a}{\v{s}} and Mischaikow, Konstantin and Patterson, Kate and Traldi, Eliane},
+  journal={Bulletin of mathematical biology},
+  volume={70},
+  number={6},
+  pages={1660--1683},
+  year={2008},
+  publisher={Springer}
+}
+
+says that the thermodynamic version in Sauro (chapter 9.6) is called Shea-Ackers formula.
+
+
+
+Designing Synthetic Gene Networks Using Artificial Transcription Factors in Yeast http://2013.igem.org/Team:Duke/Modeling/Thermodynamic_Model_Intro
+
+lab work by some biochemistry undergraduates, very useful
+
+### Thermodynamic models in general ###
+
+@article{dresch2013primer,
+  title={A Primer on Thermodynamic-based Models for Deciphering Transcriptional Regulatory Logic},
+  author={Dresch, Jacqueline M and Richards, Megan and Ay, Ahmet},
+  journal={Biochimica et Biophysica Acta (BBA)-Gene Regulatory Mechanisms},
+  year={2013},
+  publisher={Elsevier}
+} 
+
+Thermodynamic means derived using thermodynamic assumptions, describes dynamic equilibrium, actually steady state although individual specimens do change, the proportions do not.
+
+Goal: Predict expression level from regulatory region and TF concentrations
+
+history, biologists studying procaryots, simpler regulation, chemical kinetics approach, move to eucaryots necessicates use of computer programs
+
+software, lists two additional programs as well as the Python one
+later lists one additional for sensitivity analysis
+
+parameter estimation, maximize correlation with experimental data using local, global optimization techniques or scheme combining both
+testing using synthetic data sets
+
+sensitivity analysis
+highly sensitive parameters are fit much more precisely than low sensitivity parameters, interpretation
+
+combination of modeling and machine learning techiques: interpretation of structure and parameters, while learning from noisy datasets
+
+### A study we want to be able to replicate ###
+
+@article{santillan2004influence,
+  title={Influence of Catabolite Repression and Inducer Exclusion on the Bistable Behavior of the< i> lac</i> Operon},
+  author={Santill{\'a}n, Mois{\'e}s and Mackey, Michael C},
+  journal={Biophysical journal},
+  volume={86},
+  number={3},
+  pages={1282--1292},
+  year={2004},
+  publisher={Elsevier}
+}
+
+Description of the problem
+
+variables
+
+[MB], [MP], [B], [P], [AT], and [cAMPT]
+
+equations
+
+4
+
+\frac{d[M_B]}{dt} = \psi{\tau B} - (\mju + \xi_M)[M_B] 
+
+5
+
+\frac{d[M_P]}{dt} = \psi{\tau P} - (\mju + \xi_M)[M_P]
+
+6
+
+\frac{d[B]}{dt} = \frac{1}{4}k_B [M_B]T_B - (\mju + \xi_B)[B]
+
+7
+
+\frac{d[P]}{dt} = k_P [M_P]T_P - (\mju + \xi_P)[P]
+
+with κB and κP the respective translation initiation rates at the lacZ and lacY ribosome binding sites, TB the time it takes to translate the lacZ mRNA, TP the time it takes to translate the lacY mRNA, and ξB and ξP the β-galactosidase and lac permease degradation rates, respectively. The factor 1/4 in Eq. 6 accounts for the fact that the active form of β-galactosidase is a tetramer.
+
+13
+
+\{d[cAMP_T]}{dt} = v_{cAMP} - \xi_{cAMP}[cAMP] - \mju [cAMP_{T}]
+
+where ξcAMP is the cAMP removal rate, [cAMP] is the concentration of free cAMP, and [cAMPT] is the total (free plus bound) cAMP concentration.
+
+Experiment by Knorre
+
+[LE] = 1.0 mM and [GE] = 0.0 mM
+
+compute induced steady state variables
+
+(with overbars) [M_B], [M_P], [B], [P]
+
+initial conditions
+
+[]_0 = [] with bar / 1000
+
+[AT]_0 = 0 and [cAMPT]_0 = 0
+
+[LE] = 1.0 mM and [GE] = 0.0 mM (corresponding to the lactose-rich and glucose-free environment), the model time-delay-differential equations were numerically solved for 200 min.
+
+parameters:
+
+Growth rate, \mju \approx 0.02 [min^-1]
+mRNA polymerase concentration, [mRNAP] \approx 3.0 [\mju M]
+Promoter concentration, [P1] \approx 5.0 \times 10^{-3} [\mju M]
+
+would be nice to have tooltips, maybe document in code and javadoc
+
+simulation:
